@@ -1,2 +1,46 @@
-package pro.sky.graduate_work_group5_team1.controller;public class AuthController {
+package pro.sky.graduate_work_group5_team1.controller;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
+import pro.sky.graduate_work_group5_team1.model.LoginReq;
+import pro.sky.graduate_work_group5_team1.model.RegReq;
+
+@Validated
+public interface AuthController {
+
+    @Operation(
+            summary = "login",
+            tags = "Авторизация",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = LoginReq.class))),
+                    @ApiResponse(responseCode = "201", description = "Created"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")})
+    ResponseEntity<LoginReq> login(@Valid @RequestBody LoginReq loginReq);
+
+    @Operation(
+            summary = "register",
+            tags = "Авторизация",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = RegReq.class))),
+                    @ApiResponse(responseCode = "201", description = "Created"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")})
+    ResponseEntity<RegReq> register(@Parameter(description = "req", required = true) @Valid @RequestBody RegReq regReq);
+
+
 }
