@@ -1,13 +1,15 @@
 package pro.sky.graduate_work_group5_team1.controller.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.graduate_work_group5_team1.controller.AdsController;
 import pro.sky.graduate_work_group5_team1.model.*;
 import pro.sky.graduate_work_group5_team1.service.AdsService;
 
+@Slf4j
 @RestController
-//@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin(value = "http://localhost:3000")
 @RequestMapping("/ads")
 public class AdsControllerImpl implements AdsController {
 
