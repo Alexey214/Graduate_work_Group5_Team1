@@ -5,13 +5,15 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.validation.Valid;
+//import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import pro.sky.graduate_work_group5_team1.model.LoginReq;
 import pro.sky.graduate_work_group5_team1.model.RegReq;
+
+import javax.validation.Valid;
 
 @Validated
 public interface AuthController {
@@ -27,7 +29,7 @@ public interface AuthController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<LoginReq> login(@Valid @RequestBody LoginReq loginReq);
+    ResponseEntity<LoginReq> login(@Valid LoginReq loginReq);
 
     @Operation(
             summary = "register",
@@ -40,7 +42,7 @@ public interface AuthController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<RegReq> register(@Parameter(description = "req", required = true) @Valid @RequestBody RegReq regReq);
+    ResponseEntity<RegReq> register(@Parameter(description = "req", required = true) @Valid RegReq regReq);
 
 
 }

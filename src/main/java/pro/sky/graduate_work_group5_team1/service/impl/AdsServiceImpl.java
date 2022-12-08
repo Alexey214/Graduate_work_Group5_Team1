@@ -6,4 +6,5 @@ import pro.sky.graduate_work_group5_team1.service.AdsService;
 @Service
 public class AdsServiceImpl implements AdsService {
 
+
 }

@@ -17,6 +17,7 @@ public class AdsControllerImpl implements AdsController {
         this.adsService = adsService;
     }
 
+
     @Override
     @PostMapping("/{ad_pk}/comment")
     public ResponseEntity<AdsComment> addAdsComments(@PathVariable("ad_pk") String ad_pk, @RequestBody AdsComment adsComment) {
