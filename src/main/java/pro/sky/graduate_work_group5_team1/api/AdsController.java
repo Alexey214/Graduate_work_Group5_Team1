@@ -1,4 +1,4 @@
-package pro.sky.graduate_work_group5_team1.controller;
+package pro.sky.graduate_work_group5_team1.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import pro.sky.graduate_work_group5_team1.model.*;
+import pro.sky.graduate_work_group5_team1.model.dto.*;
 
 import javax.validation.Valid;
 
@@ -22,13 +22,13 @@ public interface AdsController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = AdsComment.class))),
+                            schema = @Schema(implementation = AdsCommentDto.class))),
                     @ApiResponse(responseCode = "201", description = "Created"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<AdsComment> addAdsComments(@Parameter(description = "ad_pk", required = true, schema = @Schema()) String adPk,
-                                              @Parameter(description = "comment", required = true, schema = @Schema()) @Valid AdsComment adsComment);
+    ResponseEntity<AdsCommentDto> addAdsComments(@Parameter(description = "ad_pk", required = true, schema = @Schema()) String adPk,
+                                                 @Parameter(description = "comment", required = true, schema = @Schema()) @Valid AdsCommentDto adsCommentDto);
 
     @Operation(
             summary = "addAds",
@@ -37,13 +37,13 @@ public interface AdsController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = Ads.class))),
+                            schema = @Schema(implementation = AdsDto.class))),
                     @ApiResponse(responseCode = "201", description = "Created"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<Ads> addAds(@Parameter(description = "createAds", required = true, schema = @Schema())
-                               @Valid CreateAds createAds);
+    ResponseEntity<AdsDto> addAds(@Parameter(description = "createAds", required = true, schema = @Schema())
+                                  @Valid CreateAds createAds);
 
     @Operation(
             summary = "deleteAdsComment",
@@ -73,12 +73,12 @@ public interface AdsController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = AdsComment.class))),
+                            schema = @Schema(implementation = AdsCommentDto.class))),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<AdsComment> getAdsComment(@Parameter(description = "ad_pk", required = true, schema = @Schema()) String adPk,
-                                             @Parameter(description = "id", required = true, schema = @Schema()) Integer id);
+    ResponseEntity<AdsCommentDto> getAdsComment(@Parameter(description = "ad_pk", required = true, schema = @Schema()) String adPk,
+                                                @Parameter(description = "id", required = true, schema = @Schema()) Integer id);
 
     @Operation(
             summary = "getAdsComments",
@@ -135,13 +135,13 @@ public interface AdsController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = AdsComment.class))),
+                            schema = @Schema(implementation = AdsCommentDto.class))),
                     @ApiResponse(responseCode = "204", description = "No Content"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden")})
-    ResponseEntity<AdsComment> updateAdsComment(@Parameter(description = "ad_pk", required = true, schema = @Schema()) String adPk,
-                                                @Parameter(description = "id", required = true, schema = @Schema()) Integer id,
-                                                @Parameter(description = "comment", required = true, schema = @Schema()) @Valid AdsComment adsComment);
+    ResponseEntity<AdsCommentDto> updateAdsComment(@Parameter(description = "ad_pk", required = true, schema = @Schema()) String adPk,
+                                                   @Parameter(description = "id", required = true, schema = @Schema()) Integer id,
+                                                   @Parameter(description = "comment", required = true, schema = @Schema()) @Valid AdsCommentDto adsCommentDto);
 
     @Operation(
             summary = "updateAds",
@@ -149,10 +149,10 @@ public interface AdsController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = Ads.class))),
+                            schema = @Schema(implementation = AdsDto.class))),
                     @ApiResponse(responseCode = "204", description = "No Content"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden")})
-    ResponseEntity<Ads> updateAds(@Parameter(description = "id", required = true, schema = @Schema()) Integer id,
-                                  @Parameter(description = "ads", required = true, schema = @Schema()) @Valid Ads ads);
+    ResponseEntity<AdsDto> updateAds(@Parameter(description = "id", required = true, schema = @Schema()) Integer id,
+                                     @Parameter(description = "ads", required = true, schema = @Schema()) @Valid AdsDto adsDto);
 }

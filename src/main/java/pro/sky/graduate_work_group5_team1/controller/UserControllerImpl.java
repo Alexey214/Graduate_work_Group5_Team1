@@ -1,12 +1,12 @@
-package pro.sky.graduate_work_group5_team1.controller.impl;
+package pro.sky.graduate_work_group5_team1.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pro.sky.graduate_work_group5_team1.controller.UserController;
-import pro.sky.graduate_work_group5_team1.model.NewPassword;
-import pro.sky.graduate_work_group5_team1.model.ResponseWrapperUser;
-import pro.sky.graduate_work_group5_team1.model.User;
+import pro.sky.graduate_work_group5_team1.api.UserController;
+import pro.sky.graduate_work_group5_team1.model.dto.NewPassword;
+import pro.sky.graduate_work_group5_team1.model.dto.ResponseWrapperUser;
+import pro.sky.graduate_work_group5_team1.model.dto.UserDto;
 import pro.sky.graduate_work_group5_team1.service.UserService;
 
 @Slf4j
@@ -23,7 +23,7 @@ public class UserControllerImpl implements UserController {
 
     @Override
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable("id") Integer id) {
+    public ResponseEntity<UserDto> getUser(@PathVariable("id") Integer id) {
         return null;
     }
 
@@ -41,7 +41,7 @@ public class UserControllerImpl implements UserController {
 
     @Override
     @PatchMapping("/me")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
         return null;
     }
 }

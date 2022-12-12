@@ -1,4 +1,4 @@
-package pro.sky.graduate_work_group5_team1.controller;
+package pro.sky.graduate_work_group5_team1.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,9 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import pro.sky.graduate_work_group5_team1.model.LoginReq;
-import pro.sky.graduate_work_group5_team1.model.RegReq;
+import pro.sky.graduate_work_group5_team1.model.dto.LoginReq;
+import pro.sky.graduate_work_group5_team1.model.dto.RegReq;
 
 import javax.validation.Valid;
 

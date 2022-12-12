@@ -1,14 +1,12 @@
-package pro.sky.graduate_work_group5_team1.model;
+package pro.sky.graduate_work_group5_team1.model.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * Ads
  */
 @Data
-@NoArgsConstructor
-public class Ads {
+public class AdsDto {
 
     private Integer author;
     private String image;

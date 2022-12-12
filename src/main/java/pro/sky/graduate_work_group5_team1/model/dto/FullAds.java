@@ -1,13 +1,11 @@
-package pro.sky.graduate_work_group5_team1.model;
+package pro.sky.graduate_work_group5_team1.model.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * FullAds
  */
 @Data
-@NoArgsConstructor
 public class FullAds {
 
     private String authorFirstName;

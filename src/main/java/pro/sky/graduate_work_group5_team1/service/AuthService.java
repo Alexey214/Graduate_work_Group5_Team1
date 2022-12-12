@@ -1,6 +1,6 @@
 package pro.sky.graduate_work_group5_team1.service;
 
-import pro.sky.graduate_work_group5_team1.model.RegReq;
+import pro.sky.graduate_work_group5_team1.model.dto.RegReq;
 
 public interface AuthService {
 

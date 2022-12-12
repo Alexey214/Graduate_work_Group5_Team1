@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
-import pro.sky.graduate_work_group5_team1.model.RegReq;
+import pro.sky.graduate_work_group5_team1.model.dto.RegReq;
 
 @Service
 public class AuthServiceImpl implements AuthService {

@@ -1,10 +1,10 @@
-package pro.sky.graduate_work_group5_team1.controller.impl;
+package pro.sky.graduate_work_group5_team1.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pro.sky.graduate_work_group5_team1.controller.AdsController;
-import pro.sky.graduate_work_group5_team1.model.*;
+import pro.sky.graduate_work_group5_team1.api.AdsController;
+import pro.sky.graduate_work_group5_team1.model.dto.*;
 import pro.sky.graduate_work_group5_team1.service.AdsService;
 
 @Slf4j
@@ -22,13 +22,13 @@ public class AdsControllerImpl implements AdsController {
 
     @Override
     @PostMapping("/{ad_pk}/comment")
-    public ResponseEntity<AdsComment> addAdsComments(@PathVariable("ad_pk") String ad_pk, @RequestBody AdsComment adsComment) {
+    public ResponseEntity<AdsCommentDto> addAdsComments(@PathVariable("ad_pk") String ad_pk, @RequestBody AdsCommentDto adsCommentDto) {
         return null;
     }
 
     @Override
     @PostMapping
-    public ResponseEntity<Ads> addAds(@RequestBody CreateAds createAds) {
+    public ResponseEntity<AdsDto> addAds(@RequestBody CreateAds createAds) {
         return null;
     }
 
@@ -47,8 +47,8 @@ public class AdsControllerImpl implements AdsController {
 
     @Override
     @GetMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsComment> getAdsComment(@PathVariable("ad_pk") String adPk,
-                                                    @PathVariable("id") Integer id) {
+    public ResponseEntity<AdsCommentDto> getAdsComment(@PathVariable("ad_pk") String adPk,
+                                                       @PathVariable("id") Integer id) {
         return null;
     }
 
@@ -87,15 +87,15 @@ public class AdsControllerImpl implements AdsController {
 
     @Override
     @PatchMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsComment> updateAdsComment(@PathVariable("ad_pk") String adPk,
-                                                       @PathVariable("id") Integer id,
-                                                       @RequestBody AdsComment adsComment) {
+    public ResponseEntity<AdsCommentDto> updateAdsComment(@PathVariable("ad_pk") String adPk,
+                                                          @PathVariable("id") Integer id,
+                                                          @RequestBody AdsCommentDto adsCommentDto) {
         return null;
     }
 
     @Override
     @PatchMapping("/{id}")
-    public ResponseEntity<Ads> updateAds(@PathVariable("id") Integer id, @RequestBody Ads ads) {
+    public ResponseEntity<AdsDto> updateAds(@PathVariable("id") Integer id, @RequestBody AdsDto adsDto) {
         return null;
     }
 

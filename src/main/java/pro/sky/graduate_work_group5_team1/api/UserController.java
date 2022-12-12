@@ -1,4 +1,4 @@
-package pro.sky.graduate_work_group5_team1.controller;
+package pro.sky.graduate_work_group5_team1.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,9 +9,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import pro.sky.graduate_work_group5_team1.model.NewPassword;
-import pro.sky.graduate_work_group5_team1.model.ResponseWrapperUser;
-import pro.sky.graduate_work_group5_team1.model.User;
+import pro.sky.graduate_work_group5_team1.model.dto.NewPassword;
+import pro.sky.graduate_work_group5_team1.model.dto.ResponseWrapperUser;
+import pro.sky.graduate_work_group5_team1.model.dto.UserDto;
 
 import javax.validation.Valid;
 
@@ -24,11 +24,11 @@ public interface UserController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = User.class))),
+                            schema = @Schema(implementation = UserDto.class))),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<User> getUser(@Parameter(description = "id", required = true, schema = @Schema()) Integer id);
+    ResponseEntity<UserDto> getUser(@Parameter(description = "id", required = true, schema = @Schema()) Integer id);
 
     @Operation(
             summary = "getUsers",
@@ -62,9 +62,10 @@ public interface UserController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = User.class))),
+                            schema = @Schema(implementation = UserDto.class))),
                     @ApiResponse(responseCode = "204", description = "No Content"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden")})
-    ResponseEntity<User> updateUser(@Parameter(description = "user", required = true, schema = @Schema()) @Valid User user);
+    ResponseEntity<UserDto> updateUser(@Parameter(description = "user", required = true, schema = @Schema())
+                                       @Valid UserDto user);
 }

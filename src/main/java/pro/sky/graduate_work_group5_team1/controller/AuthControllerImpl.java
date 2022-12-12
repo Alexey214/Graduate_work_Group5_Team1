@@ -1,17 +1,18 @@
-package pro.sky.graduate_work_group5_team1.controller.impl;
+package pro.sky.graduate_work_group5_team1.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import pro.sky.graduate_work_group5_team1.controller.AuthController;
-import pro.sky.graduate_work_group5_team1.model.LoginReq;
-import pro.sky.graduate_work_group5_team1.model.RegReq;
+import pro.sky.graduate_work_group5_team1.api.AuthController;
+import pro.sky.graduate_work_group5_team1.model.dto.LoginReq;
+import pro.sky.graduate_work_group5_team1.model.dto.RegReq;
 import pro.sky.graduate_work_group5_team1.service.AuthService;
 
-import static pro.sky.graduate_work_group5_team1.model.RegReq.RoleEnum.USER;
+import static pro.sky.graduate_work_group5_team1.model.dto.RegReq.RoleEnum.USER;
 
 @Slf4j
 @RestController
@@ -26,7 +27,7 @@ public class AuthControllerImpl implements AuthController {
 
     @Override
     @PostMapping("/login")
-    public ResponseEntity<LoginReq> login(LoginReq loginReq) {
+    public ResponseEntity<LoginReq> login(@RequestBody LoginReq loginReq) {
         if (authService.login(loginReq.getUsername(), loginReq.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
@@ -36,7 +37,7 @@ public class AuthControllerImpl implements AuthController {
 
     @Override
     @PostMapping("/register")
-    public ResponseEntity<RegReq> register(RegReq regReq) {
+    public ResponseEntity<RegReq> register(@RequestBody RegReq regReq) {
         RegReq.RoleEnum role = regReq.getRole() == null ? USER : regReq.getRole();
         if (authService.register(regReq, role)) {
             return ResponseEntity.ok().build();

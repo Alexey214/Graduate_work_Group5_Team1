@@ -1,7 +1,6 @@
-package pro.sky.graduate_work_group5_team1.model;
+package pro.sky.graduate_work_group5_team1.model.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -9,8 +8,7 @@ import java.time.LocalDateTime;
  * AdsComment
  */
 @Data
-@NoArgsConstructor
-public class AdsComment {
+public class AdsCommentDto {
 
     private Integer author;
     private LocalDateTime createdAt;

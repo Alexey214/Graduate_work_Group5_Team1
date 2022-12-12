@@ -1,14 +1,12 @@
-package pro.sky.graduate_work_group5_team1.model;
+package pro.sky.graduate_work_group5_team1.model.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * User
  */
 @Data
-@NoArgsConstructor
-public class User {
+public class UserDto {
 
     private String email;
     private String firstName;
