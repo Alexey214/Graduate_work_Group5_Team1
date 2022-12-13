@@ -5,6 +5,7 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,10 +23,10 @@ public class Ads {
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private User user;
-    @OneToOne(mappedBy = "ads")
+    @OneToMany(mappedBy = "ads",fetch = FetchType.LAZY)
     @JoinColumn
     @ToString.Exclude
-    private Comment comment;
+    private Set<Comment> commentSet;
 
     @Override
     public boolean equals(Object o) {

@@ -19,10 +19,10 @@ public class Comment {
     private String text;
     @OneToOne
     @JoinColumn(name = "user_id")
-    User user;
-    @OneToOne
+    private User user;
+    @ManyToOne
     @JoinColumn(name = "ads_id")
-    Ads ads;
+    private Ads ads;
 
     @Override
     public boolean equals(Object o) {
