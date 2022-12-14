@@ -14,5 +14,4 @@ public class AdsDto {
     private Integer price;
     private String title;
 
-
 }
