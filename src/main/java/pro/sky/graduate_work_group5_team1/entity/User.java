@@ -1,7 +1,7 @@
 package pro.sky.graduate_work_group5_team1.entity;
 
 import lombok.*;
-import org.hibernate.Hibernate;
+
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.SEQUENCE)
     private Long id;
     private String email;
     private String firstName;
@@ -28,7 +28,7 @@ public class User {
     @OneToOne(mappedBy = "user")
     @JoinColumn
     @ToString.Exclude
-    private Comment comment;
+    private AdsComment adsComment;
 
     @Override
     public boolean equals(Object o) {

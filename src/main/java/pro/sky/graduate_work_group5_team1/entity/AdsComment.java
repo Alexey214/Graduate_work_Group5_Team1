@@ -11,9 +11,9 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-public class Comment {
+public class AdsComment {
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.SEQUENCE)
     private Long id;
     private LocalDateTime localDateTime;
     private String text;
@@ -28,8 +28,8 @@ public class Comment {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Comment comment = (Comment) o;
-        return Objects.equals(id, comment.id);
+        AdsComment that = (AdsComment) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override

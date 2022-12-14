@@ -1,7 +1,6 @@
 package pro.sky.graduate_work_group5_team1.entity;
 
 import lombok.*;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -13,7 +12,7 @@ import java.util.Set;
 @Entity
 public class Ads {
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.SEQUENCE)
     private Long id;
     private String description;
     private String image;
@@ -26,7 +25,7 @@ public class Ads {
     @OneToMany(mappedBy = "ads",fetch = FetchType.LAZY)
     @JoinColumn
     @ToString.Exclude
-    private Set<Comment> commentSet;
+    private Set<AdsComment> adsCommentSet;
 
     @Override
     public boolean equals(Object o) {
