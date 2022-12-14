@@ -13,16 +13,19 @@ import java.util.Objects;
 @ToString
 public class AdsComment {
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private LocalDateTime localDateTime;
     private String text;
     @OneToOne
     @JoinColumn(name = "user_id")
-    private User user;
-    @ManyToOne
+    private User oneToOneUser;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ads_id")
     private Ads ads;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User manyToOneUser;
 
     @Override
     public boolean equals(Object o) {

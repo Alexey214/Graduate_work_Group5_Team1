@@ -3,6 +3,7 @@ package pro.sky.graduate_work_group5_team1.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -12,7 +13,7 @@ import java.util.Set;
 @Entity
 public class Ads {
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String description;
     private String image;
@@ -22,10 +23,10 @@ public class Ads {
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private User user;
-    @OneToMany(mappedBy = "ads",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ads", fetch = FetchType.LAZY)
     @JoinColumn
     @ToString.Exclude
-    private Set<AdsComment> adsCommentSet;
+    private List<AdsComment> adsCommentList;
 
     @Override
     public boolean equals(Object o) {

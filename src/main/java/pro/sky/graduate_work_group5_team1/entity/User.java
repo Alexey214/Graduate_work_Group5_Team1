@@ -3,9 +3,10 @@ package pro.sky.graduate_work_group5_team1.entity;
 import lombok.*;
 
 
+
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 
 @Getter
@@ -14,21 +15,26 @@ import java.util.Set;
 @Entity
 public class User {
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String email;
     private String firstName;
     private String lastName;
     private String password;
     private String phone;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JoinColumn
     @ToString.Exclude
-    private Set<Ads> ads;
-    @OneToOne(mappedBy = "user")
+    private List<Ads> ads;
+    @OneToOne(mappedBy = "oneToOneUser")
     @JoinColumn
     @ToString.Exclude
     private AdsComment adsComment;
+    @OneToMany(mappedBy = "manyToOneUser", fetch = FetchType.LAZY)
+    @JoinColumn
+    @ToString.Exclude
+    List<AdsComment> adsCommentList;
 
     @Override
     public boolean equals(Object o) {
