@@ -1,8 +1,10 @@
-package pro.sky.graduate_work_group5_team1.entity;
+package pro.sky.graduate_work_group5_team1.model;
 
-import lombok.*;
-
-
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import pro.sky.graduate_work_group5_team1.model.dto.RegReq;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,29 +14,29 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 @Entity
+@Table(name = "users")
 public class User {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    @GeneratedValue
+    private Integer id;
     private String email;
     private String firstName;
     private String lastName;
     private String password;
     private String phone;
+    @Enumerated(EnumType.ORDINAL)
+    private RegReq.RoleEnum roleEnum;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @JoinColumn
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Ads> ads;
-    @OneToOne(mappedBy = "oneToOneUser")
-    @JoinColumn
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     @ToString.Exclude
-    private AdsComment adsComment;
-    @OneToMany(mappedBy = "manyToOneUser", fetch = FetchType.LAZY)
-    @JoinColumn
-    @ToString.Exclude
-    List<AdsComment> adsCommentList;
+    private List<AdsComment> adsComment;
 
     @Override
     public boolean equals(Object o) {
