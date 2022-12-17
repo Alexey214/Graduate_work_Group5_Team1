@@ -1,7 +1,9 @@
-package pro.sky.graduate_work_group5_team1.entity;
+package pro.sky.graduate_work_group5_team1.model;
 
-import lombok.*;
-
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,22 +12,22 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString
 public class AdsComment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-    private LocalDateTime localDateTime;
+    @Column(name = "id", nullable = false)
+    private Integer id;
+    private LocalDateTime createdAt;
     private String text;
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User oneToOneUser;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ads_id")
-    private Ads ads;
+    private Ads pk;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private User manyToOneUser;
+    private User author;
 
     @Override
     public boolean equals(Object o) {

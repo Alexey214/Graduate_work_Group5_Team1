@@ -1,20 +1,25 @@
-package pro.sky.graduate_work_group5_team1.entity;
+package pro.sky.graduate_work_group5_team1.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 @Entity
 public class Ads {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    @Column(name = "id", nullable = false)
+    private Integer pk;
     private String description;
     private String image;
     private Integer price;
@@ -22,22 +27,21 @@ public class Ads {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
-    private User user;
-    @OneToMany(mappedBy = "ads", fetch = FetchType.LAZY)
-    @JoinColumn
+    private User author;
+    @OneToMany(mappedBy = "pk", fetch = FetchType.LAZY)
     @ToString.Exclude
-    private List<AdsComment> adsCommentList;
+    private List<AdsComment> adsComment;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ads ads = (Ads) o;
-        return Objects.equals(id, ads.id);
+        return Objects.equals(pk, ads.pk);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(pk);
     }
 }
