@@ -1,4 +1,4 @@
-package pro.sky.graduate_work_group5_team1.controller;
+package pro.sky.graduate_work_group5_team1.configuration;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;

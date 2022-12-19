@@ -15,7 +15,7 @@ import pro.sky.graduate_work_group5_team1.model.dto.RegReq;
 import javax.validation.Valid;
 
 @Validated
-public interface AuthController {
+public interface AuthApi {
 
     @Operation(
             summary = "login",

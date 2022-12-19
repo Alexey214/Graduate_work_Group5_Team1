@@ -1,83 +1,81 @@
 package pro.sky.graduate_work_group5_team1.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pro.sky.graduate_work_group5_team1.Repositories.UserRepository;
-import pro.sky.graduate_work_group5_team1.mapper.AdsCommentMapper;
-import pro.sky.graduate_work_group5_team1.mapper.AdsMapper;
+import org.webjars.NotFoundException;
+import pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException;
+import pro.sky.graduate_work_group5_team1.model.dto.*;
+import pro.sky.graduate_work_group5_team1.repository.UserRepository;
 import pro.sky.graduate_work_group5_team1.mapper.UserMapper;
-import pro.sky.graduate_work_group5_team1.model.Ads;
-import pro.sky.graduate_work_group5_team1.model.AdsComment;
 import pro.sky.graduate_work_group5_team1.model.User;
-import pro.sky.graduate_work_group5_team1.model.dto.AdsCommentDto;
-import pro.sky.graduate_work_group5_team1.model.dto.AdsDto;
-import pro.sky.graduate_work_group5_team1.model.dto.RegReq;
-import pro.sky.graduate_work_group5_team1.model.dto.UserDto;
 import pro.sky.graduate_work_group5_team1.service.UserService;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
-    private final AdsCommentMapper adsCommentMapper;
-    private final AdsMapper adsMapper;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserMapper userMapper, AdsCommentMapper adsCommentMapper, AdsMapper adsMapper, UserRepository userRepository) {
-        this.userMapper = userMapper;
-        this.adsCommentMapper = adsCommentMapper;
-        this.adsMapper = adsMapper;
-        this.userRepository = userRepository;
+
+    @Override
+    public UserDto getUser(Integer id) {
+        log.info("Получаем пользователя с id {}:", id);
+        return userRepository.findById(id)
+                .map(userMapper::toDto)
+                .orElseThrow(UserNotFoundException::new);
     }
 
-    public void testMapper() {
-        Ads ads = new Ads();
-        User user = new User();
-        user.setId(1);
-        user.setPhone("123");
-        user.setLastName("qwe");
-        user.setEmail("zxc");
-        user.setAds(List.of(ads));
-        user.setAdsComment(new ArrayList<>());
-        user.setPassword("007");
-        user.setFirstName("[[[");
-        user.setRoleEnum(RegReq.RoleEnum.USER);
-        System.out.println(user);
+    @Override
+    public UserDto getUser(String email) {
+        log.info("Получаем пользователя с email {}:", email);
+        return userRepository.findByEmail(email)
+                .map(userMapper::toDto)
+                .orElseThrow(UserNotFoundException::new);
+    }
 
-        UserDto userDto = userMapper.toDto(user);
-        System.out.println(userDto);
-        User user1 = userMapper.toModel(userDto);
-        System.out.println(user1);
+    @Override
+    public ResponseWrapperUser getUsers() {
+        log.info("Получаем всех пользователей");
+        List<UserDto> userDtos = userRepository.findAll().stream()
+                .map(userMapper::toDto)
+                .sorted(Comparator.comparing(UserDto::getId))
+                .toList();
+        ResponseWrapperUser responseWrapperUser = new ResponseWrapperUser();
+        responseWrapperUser.setResults(userDtos);
+        responseWrapperUser.setCount(userDtos.size());
+        return responseWrapperUser;
+    }
 
-        ads.setAuthor(user);
-        ads.setTitle("qqq");
-        ads.setPrice(123);
-        ads.setDescription("aaa");
-        ads.setPk(1);
-        ads.setImage("zzz");
-        System.out.println(ads);
+    @Override
+    public NewPassword setPassword(NewPassword newPassword, String email) {
+        log.info("Сохраняем пароль пользователя с email {}:", email);
+        User userTmp = userRepository.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+        if (!passwordEncoder.matches(newPassword.getCurrentPassword(), userTmp.getPassword())) {
+            log.debug("Неверный пароль пользователя");
+            throw new NotFoundException(newPassword.getCurrentPassword());
+        }
+        userTmp.setPassword(passwordEncoder.encode(newPassword.getNewPassword()));
+        userRepository.save(userTmp);
+        return newPassword;
+    }
 
-        AdsDto adsDto = adsMapper.toDto(ads);
-        System.out.println(adsDto);
-
-        ads = adsMapper.toModel(adsDto);
-        System.out.println(ads);
-
-        AdsComment adsComment = new AdsComment();
-        adsComment.setPk(ads);
-        adsComment.setAuthor(user);
-        adsComment.setId(1);
-        adsComment.setText("qwertyuiop[]");
-        adsComment.setCreatedAt(LocalDateTime.now());
-        System.out.println("\n" + adsComment);
-
-        AdsCommentDto commentDto = adsCommentMapper.toDto(adsComment);
-        System.out.println("\n" + commentDto);
-
-        AdsComment adsComment1 = adsCommentMapper.toModel(commentDto);
-        System.out.println(adsComment1);
+    @Override
+    public UserDto updateUser(UserDto userDto) {
+        log.info("Изменяем пользователя " + userDto);
+        User userDtoTmp = userRepository.findByEmail(userDto.getEmail())
+                .orElseThrow(UserNotFoundException::new);
+        userDtoTmp.setPhone(userDtoTmp.getPhone());
+        userDtoTmp.setFirstName(userDtoTmp.getFirstName());
+        userDtoTmp.setLastName(userDtoTmp.getLastName());
+        return userMapper.toDto(userRepository.save(userDtoTmp));
     }
 }
