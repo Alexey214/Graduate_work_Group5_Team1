@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import pro.sky.graduate_work_group5_team1.api.AuthController;
+import pro.sky.graduate_work_group5_team1.api.AuthApi;
 import pro.sky.graduate_work_group5_team1.model.dto.LoginReq;
 import pro.sky.graduate_work_group5_team1.model.dto.RegReq;
 import pro.sky.graduate_work_group5_team1.service.AuthService;
@@ -17,11 +17,11 @@ import static pro.sky.graduate_work_group5_team1.model.dto.RegReq.RoleEnum.USER;
 @Slf4j
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
-public class AuthControllerImpl implements AuthController {
+public class AuthController implements AuthApi {
 
     private final AuthService authService;
 
-    public AuthControllerImpl(AuthService authService) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
     }
 

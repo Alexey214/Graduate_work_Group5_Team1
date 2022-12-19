@@ -1,4 +1,4 @@
-package pro.sky.graduate_work_group5_team1.Repositories;
+package pro.sky.graduate_work_group5_team1.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

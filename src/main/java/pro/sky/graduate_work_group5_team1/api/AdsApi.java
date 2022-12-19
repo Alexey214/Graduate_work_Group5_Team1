@@ -14,7 +14,7 @@ import pro.sky.graduate_work_group5_team1.model.dto.*;
 import javax.validation.Valid;
 
 @Validated
-public interface AdsController {
+public interface AdsApi {
 
     @Operation(
             summary = "addAdsComments",

@@ -16,7 +16,7 @@ import pro.sky.graduate_work_group5_team1.model.dto.UserDto;
 import javax.validation.Valid;
 
 @Validated
-public interface UserController {
+public interface UserApi {
 
     @Operation(
             summary = "getUsers",
