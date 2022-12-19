@@ -92,11 +92,12 @@
             <version>${lombok-mapstruct-binding.version}</version>
         </dependency>
 
-        <!--		<dependency>-->
-        <!--			<groupId>org.liquibase</groupId>-->
-        <!--			<artifactId>liquibase-core</artifactId>-->
-        <!--        <version>${org.liquibase.version}</version>-->
-        <!--		</dependency>-->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.18.0</version>
+        </dependency>
+
 
     </dependencies>
 
