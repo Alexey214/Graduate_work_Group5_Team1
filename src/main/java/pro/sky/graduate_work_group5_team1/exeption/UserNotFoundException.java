@@ -6,4 +6,7 @@ public class UserNotFoundException extends RuntimeException {
         System.out.println("Пользователь не найден");
     }
 
+    public UserNotFoundException(String message) {
+        super(message);
+    }
 }

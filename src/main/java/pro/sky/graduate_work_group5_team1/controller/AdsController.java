@@ -1,5 +1,6 @@
 package pro.sky.graduate_work_group5_team1.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,16 +10,12 @@ import pro.sky.graduate_work_group5_team1.service.AdsService;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @CrossOrigin(value = "http://localhost:3000")
 @RequestMapping("/ads")
 public class AdsController implements AdsApi {
 
     private final AdsService adsService;
-
-    public AdsController(AdsService adsService) {
-        this.adsService = adsService;
-    }
-
 
     @Override
     @PostMapping("/{ad_pk}/comment")
