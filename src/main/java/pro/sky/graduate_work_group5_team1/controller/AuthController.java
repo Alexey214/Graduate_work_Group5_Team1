@@ -1,5 +1,6 @@
 package pro.sky.graduate_work_group5_team1.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +17,11 @@ import static pro.sky.graduate_work_group5_team1.model.dto.RegReq.RoleEnum.USER;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @CrossOrigin(value = "http://localhost:3000")
 public class AuthController implements AuthApi {
 
     private final AuthService authService;
-
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
 
     @Override
     @PostMapping("/login")

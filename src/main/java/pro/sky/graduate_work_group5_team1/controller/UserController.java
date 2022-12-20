@@ -1,5 +1,6 @@
 package pro.sky.graduate_work_group5_team1.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,15 +12,12 @@ import pro.sky.graduate_work_group5_team1.service.UserService;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @CrossOrigin(value = "http://localhost:3000")
 @RequestMapping("/users")
 public class UserController implements UserApi {
 
     private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @Override
     @GetMapping("/{id}")
