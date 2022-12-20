@@ -21,7 +21,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean login(String userName, String password) {
+        log.info("Вход в систему пользователя userName: {}", userName);
         if (!manager.userExists(userName)) {
+            log.warn("Неверное имя пользователя userName: {}", userName);
             return false;
         }
         UserDetails userDetails = manager.loadUserByUsername(userName);
@@ -32,7 +34,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(RegReq registerReq, RegReq.RoleEnum role) {
+        log.debug("Регистрация пользователя userName: {}", registerReq.getUsername());
         if (manager.userExists(registerReq.getUsername())) {
+            log.warn("Пользователь с данным именем userName: {}, уже существует", registerReq.getUsername());
             return false;
         }
         manager.createUser(User.withDefaultPasswordEncoder().password(registerReq.getPassword()).username(registerReq.getUsername()).roles(role.name()).build());
