@@ -26,9 +26,10 @@ public interface AdsService {
      * Метод для удаления комментария
      *
      * @param adPk ключ объявления, в котором написан комментарий
-     * @param id   идентефикатор комментария
+     * @param id   идентификатор комментария
+     * @return
      */
-    void deleteAdsComment(Integer adPk, Integer id);
+    AdsCommentDto deleteAdsComment(Integer adPk, Integer id);
 
     /**
      * Метод для получения списка всех объявлений с указанием их количества
@@ -82,8 +83,9 @@ public interface AdsService {
      * Метод для удаления объявления
      *
      * @param id идентификатор объявления
+     * @return
      */
-    void removeAds(Integer id);
+    AdsDto removeAds(Integer id);
 
     /**
      * Метод для изменения комментария
