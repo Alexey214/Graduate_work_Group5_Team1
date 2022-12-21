@@ -3,16 +3,22 @@ package pro.sky.graduate_work_group5_team1.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pro.sky.graduate_work_group5_team1.mapper.AdsCommentListMapper;
+import pro.sky.graduate_work_group5_team1.exeption.AdsCommentNotFoundException;
+import pro.sky.graduate_work_group5_team1.exeption.AdsNotFoundException;
+import pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException;
 import pro.sky.graduate_work_group5_team1.mapper.AdsCommentMapper;
 import pro.sky.graduate_work_group5_team1.mapper.AdsListMapper;
 import pro.sky.graduate_work_group5_team1.mapper.AdsMapper;
 import pro.sky.graduate_work_group5_team1.model.Ads;
+import pro.sky.graduate_work_group5_team1.model.AdsComment;
+import pro.sky.graduate_work_group5_team1.model.User;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
 import pro.sky.graduate_work_group5_team1.repository.AdsRepository;
 import pro.sky.graduate_work_group5_team1.repository.CommentRepository;
+import pro.sky.graduate_work_group5_team1.repository.UserRepository;
 import pro.sky.graduate_work_group5_team1.service.AdsService;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -21,18 +27,11 @@ import java.util.List;
 public class AdsServiceImpl implements AdsService {
 
     private final AdsMapper adsMapper;
-
     private final AdsListMapper adsListMapper;
-
     private final AdsCommentMapper adsCommentMapper;
-
-    private final AdsCommentListMapper adsCommentListMapper;
-
     private final AdsRepository adsRepository;
-
     private final CommentRepository commentRepository;
-
-
+    private final UserRepository userRepository;
 
 
     @Override
@@ -57,8 +56,15 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public void deleteAdsComment(Integer adPk, Integer id) {
-
+    public AdsCommentDto deleteAdsComment(Integer adPk, Integer id) {
+        log.info("Удаляем комментарий с id {}, относящийся к объявлению с ключом {}", id, adPk);
+        AdsComment adsComment = commentRepository.findAdsCommentByPkAndId(adPk, id)
+                .orElseThrow(AdsCommentNotFoundException::new);
+        if (adsComment != null) {
+            commentRepository.deleteById(adsComment.getId());
+            log.warn("Комментарий с id {} удален", id);
+        }
+        return adsCommentMapper.toDto(adsComment);
     }
 
     @Override
@@ -66,6 +72,7 @@ public class AdsServiceImpl implements AdsService {
         log.info("Ищем все объявления");
         ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
         List<AdsDto> results = adsListMapper.toDtoList(adsRepository.findAll());
+        results.stream().sorted(Comparator.comparing(AdsDto::getAuthor));
         responseWrapperAds.setResults(results);
         responseWrapperAds.setCount(results.size());
         return responseWrapperAds;
@@ -73,37 +80,86 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdsCommentDto getAdsComment(Integer adPk, Integer id) {
-        return null;
+        log.info("Получаем комментарий с id {}, относящийся к объявлению с ключом {}", id, adPk);
+        AdsComment adsComment = commentRepository.findAdsCommentByPkAndId(adPk, id)
+                .orElseThrow(AdsCommentNotFoundException::new);
+        return adsCommentMapper.toDto(adsComment);
     }
 
     @Override
     public ResponseWrapperAdsComment getAdsComments(Integer adPk) {
-        return null;
+        log.info("Получаем все комментарии одного объявления с pk " + adPk);
+        List<AdsCommentDto> adsCommentList = commentRepository.findAll().stream()
+                .map(adsCommentMapper::toDto)
+                .sorted(Comparator.comparing(AdsCommentDto::getCreatedAt))
+                .toList();
+        ResponseWrapperAdsComment responseWrapperAdsComment = new ResponseWrapperAdsComment();
+        if (!adsCommentList.isEmpty()) {
+            log.info("В списке {} комментариев ", adsCommentList.size());
+            responseWrapperAdsComment.setResults(adsCommentList);
+            responseWrapperAdsComment.setCount(adsCommentList.size());
+        }
+        return responseWrapperAdsComment;
     }
 
     @Override
-    public ResponseWrapperAds getAdsMe(Boolean authenticated, String authorities0Authority, Object credentials, Object details, Object principal) {
+    public ResponseWrapperAds getAdsMe(Boolean authenticated,
+                                       String authorities0Authority,
+                                       Object credentials,
+                                       Object details,
+                                       Object principal) {
         return null;
     }
 
     @Override
     public FullAds getAds(Integer id) {
-        return null;
+        Ads ads = adsRepository.findById(id).orElseThrow(AdsCommentNotFoundException::new);
+        User user = userRepository.findById(ads.getAuthor().getId()).orElseThrow(UserNotFoundException::new);
+        FullAds fullAds = new FullAds();
+        fullAds.setAuthorFirstName(user.getFirstName());
+        fullAds.setAuthorLastName(user.getLastName());
+        fullAds.setDescription(ads.getDescription());
+        fullAds.setEmail(user.getEmail());
+        fullAds.setImage(ads.getImage());
+        fullAds.setPhone(user.getPhone());
+        fullAds.setPk(ads.getPk());
+        fullAds.setPrice(ads.getPrice());
+        fullAds.setTitle(ads.getTitle());
+        log.info("Создаём FullAds {}", fullAds);
+        return fullAds;
     }
 
     @Override
-    public void removeAds(Integer id) {
+    public AdsDto removeAds(Integer id) {
         log.info("Удаляем объявление с id {}:", id);
-        adsRepository.deleteById(id);
+        Ads ads = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
+        if (ads != null) {
+            adsRepository.deleteById(id);
+            log.warn("Объявление с id {} удалено", id);
+        }
+        return adsMapper.toDto(ads);
     }
 
     @Override
     public AdsCommentDto updateAdsComment(Integer adPk, Integer id, AdsCommentDto adsCommentDto) {
-        return null;
+        AdsComment adsComment = commentRepository.findAdsCommentByPkAndId(adPk, id)
+                .orElseThrow(AdsCommentNotFoundException::new);
+        log.debug("Изменяем комментарий {}, принадлежащее пользователю с id {} и относящийся к объявлению с ключом {}",
+                adsComment, id, adPk);
+        adsComment.setAuthor(userRepository.findById(id).orElseThrow(UserNotFoundException::new));
+        adsComment.setPk(adsRepository.findById(adPk).orElseThrow(AdsNotFoundException::new));
+        adsComment.setText(adsComment.getText());
+        adsComment.setCreatedAt(adsCommentDto.getCreatedAt());
+        commentRepository.save(adsComment);
+        return adsCommentDto;
     }
 
     @Override
     public AdsDto updateAds(Integer id, AdsDto adsDto) {
-        return null;
+        log.debug("Изменяем объявление {}, принадлежащее пользователю с id {}", adsDto, id);
+        Ads ads = adsMapper.toModel(adsDto);
+        ads.setPk(id);
+        adsRepository.save(ads);
+        return adsDto;
     }
 }

@@ -39,7 +39,10 @@ public class AuthServiceImpl implements AuthService {
             log.warn("Пользователь с данным именем userName: {}, уже существует", registerReq.getUsername());
             return false;
         }
-        manager.createUser(User.withDefaultPasswordEncoder().password(registerReq.getPassword()).username(registerReq.getUsername()).roles(role.name()).build());
+        manager.createUser(User.withDefaultPasswordEncoder()
+                .password(registerReq.getPassword())
+                .username(registerReq.getUsername())
+                .roles(role.name()).build());
         return true;
     }
 

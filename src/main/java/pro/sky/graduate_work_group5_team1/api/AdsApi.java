@@ -52,8 +52,8 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "204", description = "No Content"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden")})
-    ResponseEntity<Void> deleteAdsComment(@Parameter(description = "ad_pk", required = true, schema = @Schema()) String adPk,
-                                          @Parameter(description = "id", required = true, schema = @Schema()) Integer id);
+    ResponseEntity<AdsCommentDto> deleteAdsComment(@Parameter(description = "ad_pk", required = true, schema = @Schema()) String adPk,
+                                                   @Parameter(description = "id", required = true, schema = @Schema()) Integer id);
 
     @Operation(
             summary = "getALLAds",
@@ -127,7 +127,7 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "204", description = "No Content"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden")})
-    ResponseEntity<Void> removeAds(@Parameter(description = "id", required = true, schema = @Schema()) Integer id);
+    ResponseEntity<AdsDto> removeAds(@Parameter(description = "id", required = true, schema = @Schema()) Integer id);
 
     @Operation(
             summary = "updateAdsComment",

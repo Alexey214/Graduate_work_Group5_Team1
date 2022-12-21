@@ -31,8 +31,8 @@ public class AdsController implements AdsApi {
 
     @Override
     @DeleteMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<Void> deleteAdsComment(@PathVariable("ad_pk") String adPk,
-                                                 @PathVariable("id") Integer id) {
+    public ResponseEntity<AdsCommentDto> deleteAdsComment(@PathVariable("ad_pk") String adPk,
+                                                          @PathVariable("id") Integer id) {
         return null;
     }
 
@@ -78,7 +78,7 @@ public class AdsController implements AdsApi {
 
     @Override
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeAds(@PathVariable("id") Integer id) {
+    public ResponseEntity<AdsDto> removeAds(@PathVariable("id") Integer id) {
         return null;
     }
 

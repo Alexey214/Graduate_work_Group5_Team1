@@ -48,8 +48,11 @@ public class UserServiceImpl implements UserService {
                 .sorted(Comparator.comparing(UserDto::getId))
                 .toList();
         ResponseWrapperUser responseWrapperUser = new ResponseWrapperUser();
-        responseWrapperUser.setResults(userDtos);
-        responseWrapperUser.setCount(userDtos.size());
+        if (!userDtos.isEmpty()) {
+            log.info("В списке {} пользователей ", userDtos.size());
+            responseWrapperUser.setResults(userDtos);
+            responseWrapperUser.setCount(userDtos.size());
+        }
         return responseWrapperUser;
     }
 
