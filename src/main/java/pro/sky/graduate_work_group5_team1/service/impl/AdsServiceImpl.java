@@ -14,7 +14,7 @@ import pro.sky.graduate_work_group5_team1.model.AdsComment;
 import pro.sky.graduate_work_group5_team1.model.User;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
 import pro.sky.graduate_work_group5_team1.repository.AdsRepository;
-import pro.sky.graduate_work_group5_team1.repository.CommentRepository;
+import pro.sky.graduate_work_group5_team1.repository.AdsCommentRepository;
 import pro.sky.graduate_work_group5_team1.repository.UserRepository;
 import pro.sky.graduate_work_group5_team1.service.AdsService;
 
@@ -30,18 +30,21 @@ public class AdsServiceImpl implements AdsService {
     private final AdsListMapper adsListMapper;
     private final AdsCommentMapper adsCommentMapper;
     private final AdsRepository adsRepository;
-    private final CommentRepository commentRepository;
+    private final AdsCommentRepository adsCommentRepository;
     private final UserRepository userRepository;
 
 
     @Override
     public AdsCommentDto addAdsComments(Integer ad_pk, AdsCommentDto adsCommentDto) {
-        return null;
+        log.debug("Добавляем комментарий {}, принадлежащий объявлению с ключом {}", adsCommentDto, ad_pk);
+        AdsComment adsComment = adsCommentMapper.toModel(adsCommentDto);
+        adsCommentRepository.save(adsComment);
+        return adsCommentMapper.toDto(adsComment);
     }
 
     @Override
     public AdsDto addAds(CreateAds createAds) {
-        log.info("Добавляем объявление с title {}:", createAds.getTitle());
+        log.debug("Добавляем объявление с title {}:", createAds.getTitle());
         Ads adsToCommit = new Ads();
 
         adsToCommit.setDescription(createAds.getDescription());
@@ -58,10 +61,10 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsCommentDto deleteAdsComment(Integer adPk, Integer id) {
         log.info("Удаляем комментарий с id {}, относящийся к объявлению с ключом {}", id, adPk);
-        AdsComment adsComment = commentRepository.findAdsCommentByPkAndId(adPk, id)
+        AdsComment adsComment = adsCommentRepository.findAdsCommentByPkAndId(adPk, id)
                 .orElseThrow(AdsCommentNotFoundException::new);
         if (adsComment != null) {
-            commentRepository.deleteById(adsComment.getId());
+            adsCommentRepository.deleteById(adsComment.getId());
             log.warn("Комментарий с id {} удален", id);
         }
         return adsCommentMapper.toDto(adsComment);
@@ -81,7 +84,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsCommentDto getAdsComment(Integer adPk, Integer id) {
         log.info("Получаем комментарий с id {}, относящийся к объявлению с ключом {}", id, adPk);
-        AdsComment adsComment = commentRepository.findAdsCommentByPkAndId(adPk, id)
+        AdsComment adsComment = adsCommentRepository.findAdsCommentByPkAndId(adPk, id)
                 .orElseThrow(AdsCommentNotFoundException::new);
         return adsCommentMapper.toDto(adsComment);
     }
@@ -89,7 +92,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public ResponseWrapperAdsComment getAdsComments(Integer adPk) {
         log.info("Получаем все комментарии одного объявления с pk " + adPk);
-        List<AdsCommentDto> adsCommentList = commentRepository.findAll().stream()
+        List<AdsCommentDto> adsCommentList = adsCommentRepository.findAll().stream()
                 .map(adsCommentMapper::toDto)
                 .sorted(Comparator.comparing(AdsCommentDto::getCreatedAt))
                 .toList();
@@ -142,7 +145,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdsCommentDto updateAdsComment(Integer adPk, Integer id, AdsCommentDto adsCommentDto) {
-        AdsComment adsComment = commentRepository.findAdsCommentByPkAndId(adPk, id)
+        AdsComment adsComment = adsCommentRepository.findAdsCommentByPkAndId(adPk, id)
                 .orElseThrow(AdsCommentNotFoundException::new);
         log.debug("Изменяем комментарий {}, принадлежащее пользователю с id {} и относящийся к объявлению с ключом {}",
                 adsComment, id, adPk);
@@ -150,7 +153,7 @@ public class AdsServiceImpl implements AdsService {
         adsComment.setPk(adsRepository.findById(adPk).orElseThrow(AdsNotFoundException::new));
         adsComment.setText(adsComment.getText());
         adsComment.setCreatedAt(adsCommentDto.getCreatedAt());
-        commentRepository.save(adsComment);
+        adsCommentRepository.save(adsComment);
         return adsCommentDto;
     }
 
