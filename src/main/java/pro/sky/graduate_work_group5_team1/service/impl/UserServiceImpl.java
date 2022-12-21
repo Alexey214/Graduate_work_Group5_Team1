@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pro.sky.graduate_work_group5_team1.exeption.ForbiddenException;
+import pro.sky.graduate_work_group5_team1.exeption.UnauthorizedException;
 import pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
 import pro.sky.graduate_work_group5_team1.repository.UserRepository;
@@ -60,10 +62,10 @@ public class UserServiceImpl implements UserService {
     public NewPassword setPassword(NewPassword newPassword, String email) {
         log.info("Сохраняем пароль пользователя с email {}:", email);
         User userTmp = userRepository.findByEmail(email)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(ForbiddenException::new);
         if (!passwordEncoder.matches(newPassword.getCurrentPassword(), userTmp.getPassword())) {
             log.debug("Неверный пароль пользователя");
-            throw new UserNotFoundException("Неверный пароль пользователя");
+            throw new UnauthorizedException("Неверный пароль пользователя");
         }
         userTmp.setPassword(passwordEncoder.encode(newPassword.getNewPassword()));
         userRepository.save(userTmp);
