@@ -19,13 +19,13 @@ public class AdsController implements AdsApi {
     private final AdsService adsService;
 
     @Override
-    @PostMapping("/{ad_pk}/comment")
-    public ResponseEntity<AdsCommentDto> addAdsComments(@PathVariable("ad_pk") String ad_pk,
+    @PostMapping("/{adPk}/comment")
+    public ResponseEntity<AdsCommentDto> addAdsComments(@PathVariable("adPk") String adPk,
                                                         @RequestBody AdsCommentDto adsCommentDto) {
-        if (Integer.parseInt(ad_pk) < 0 || adsCommentDto == null) {
+        if (Integer.parseInt(adPk) < 0 || adsCommentDto == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        AdsCommentDto adsCommentDtoTmp = adsService.addAdsComments(Integer.parseInt(ad_pk), adsCommentDto);
+        AdsCommentDto adsCommentDtoTmp = adsService.addAdsComments(Integer.parseInt(adPk), adsCommentDto);
         if (adsCommentDtoTmp == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -45,8 +45,8 @@ public class AdsController implements AdsApi {
     }
 
     @Override
-    @DeleteMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsCommentDto> deleteAdsComment(@PathVariable("ad_pk") String adPk,
+    @DeleteMapping("/{adPk}/comment/{id}")
+    public ResponseEntity<AdsCommentDto> deleteAdsComment(@PathVariable("adPk") String adPk,
                                                           @PathVariable("id") Integer id) {
         if (Integer.parseInt(adPk) < 0 && id < 0) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -69,8 +69,8 @@ public class AdsController implements AdsApi {
     }
 
     @Override
-    @GetMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsCommentDto> getAdsComment(@PathVariable("ad_pk") String adPk,
+    @GetMapping("/{adPk}/comment/{id}")
+    public ResponseEntity<AdsCommentDto> getAdsComment(@PathVariable("adPk") String adPk,
                                                        @PathVariable("id") Integer id) {
         if (Integer.parseInt(adPk) < 0 && id < 0) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -83,8 +83,8 @@ public class AdsController implements AdsApi {
     }
 
     @Override
-    @GetMapping("/{ad_pk}/comment")
-    public ResponseEntity<ResponseWrapperAdsComment> getAdsComments(@PathVariable("ad_pk") String adPk) {
+    @GetMapping("/{adPk}/comment")
+    public ResponseEntity<ResponseWrapperAdsComment> getAdsComments(@PathVariable("adPk") String adPk) {
         if (Integer.parseInt(adPk) < 0) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -137,8 +137,8 @@ public class AdsController implements AdsApi {
     }
 
     @Override
-    @PatchMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsCommentDto> updateAdsComment(@PathVariable("ad_pk") String adPk,
+    @PatchMapping("/{adPk}/comment/{id}")
+    public ResponseEntity<AdsCommentDto> updateAdsComment(@PathVariable("adPk") String adPk,
                                                           @PathVariable("id") Integer id,
                                                           @RequestBody AdsCommentDto adsCommentDto) {
         if (Integer.parseInt(adPk) < 0 && id < 0 && adsCommentDto == null) {

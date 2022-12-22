@@ -47,7 +47,7 @@ public class UserController implements UserApi, UtilSecurity {
     }
 
     @Override
-    @PostMapping("/set_password")
+    @PostMapping("/setPassword")
     public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPassword) {
         try {
             NewPassword password = userService.setPassword(newPassword, login());

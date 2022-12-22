@@ -8,11 +8,11 @@ public interface AdsService {
     /**
      * Метод для добавления комментариев к объявлению
      *
-     * @param ad_pk         ключ, соответствующий данному {@link AdsComment}
+     * @param adPk          ключ, соответствующий данному {@link AdsComment}
      * @param adsCommentDto сущность комментария с ключевым полем "text"
      * @return возвращает добавленный экземпляр {@link AdsCommentDto}
      */
-    AdsCommentDto addAdsComments(Integer ad_pk, AdsCommentDto adsCommentDto);
+    AdsCommentDto addAdsComments(Integer adPk, AdsCommentDto adsCommentDto);
 
     /**
      * Метод добавления объявления

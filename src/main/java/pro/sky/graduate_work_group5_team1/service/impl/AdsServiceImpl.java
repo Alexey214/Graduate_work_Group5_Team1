@@ -35,8 +35,8 @@ public class AdsServiceImpl implements AdsService {
 
 
     @Override
-    public AdsCommentDto addAdsComments(Integer ad_pk, AdsCommentDto adsCommentDto) {
-        log.debug("Добавляем комментарий {}, принадлежащий объявлению с ключом {}", adsCommentDto, ad_pk);
+    public AdsCommentDto addAdsComments(Integer adPk, AdsCommentDto adsCommentDto) {
+        log.debug("Добавляем комментарий {}, принадлежащий объявлению с ключом {}", adsCommentDto, adPk);
         AdsComment adsComment = adsCommentMapper.toModel(adsCommentDto);
         adsCommentRepository.save(adsComment);
         return adsCommentMapper.toDto(adsComment);
