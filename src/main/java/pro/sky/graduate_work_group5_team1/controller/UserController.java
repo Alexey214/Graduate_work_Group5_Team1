@@ -10,9 +10,8 @@ import pro.sky.graduate_work_group5_team1.exeption.UnauthorizedException;
 import pro.sky.graduate_work_group5_team1.model.dto.NewPassword;
 import pro.sky.graduate_work_group5_team1.model.dto.ResponseWrapperUser;
 import pro.sky.graduate_work_group5_team1.model.dto.UserDto;
+import pro.sky.graduate_work_group5_team1.security.UtilSecurity;
 import pro.sky.graduate_work_group5_team1.service.UserService;
-
-import static pro.sky.graduate_work_group5_team1.security.UtilSecurity.login;
 
 
 @Slf4j
@@ -20,7 +19,7 @@ import static pro.sky.graduate_work_group5_team1.security.UtilSecurity.login;
 @RequiredArgsConstructor
 @CrossOrigin(value = "http://localhost:3000")
 @RequestMapping("/users")
-public class UserController implements UserApi {
+public class UserController implements UserApi, UtilSecurity {
 
     private final UserService userService;
 
