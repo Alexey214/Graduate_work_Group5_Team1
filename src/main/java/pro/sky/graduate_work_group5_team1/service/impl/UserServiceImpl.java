@@ -2,6 +2,8 @@ package pro.sky.graduate_work_group5_team1.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pro.sky.graduate_work_group5_team1.exeption.ForbiddenException;
@@ -82,4 +84,5 @@ public class UserServiceImpl implements UserService {
         userDtoTmp.setLastName(userDtoTmp.getLastName());
         return userMapper.toDto(userRepository.save(userDtoTmp));
     }
+
 }

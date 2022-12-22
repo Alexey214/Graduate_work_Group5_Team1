@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.graduate_work_group5_team1.api.UserApi;
 import pro.sky.graduate_work_group5_team1.exeption.UnauthorizedException;
@@ -13,6 +11,9 @@ import pro.sky.graduate_work_group5_team1.model.dto.NewPassword;
 import pro.sky.graduate_work_group5_team1.model.dto.ResponseWrapperUser;
 import pro.sky.graduate_work_group5_team1.model.dto.UserDto;
 import pro.sky.graduate_work_group5_team1.service.UserService;
+
+import static pro.sky.graduate_work_group5_team1.security.UtilSecurity.login;
+
 
 @Slf4j
 @RestController
@@ -70,8 +71,4 @@ public class UserController implements UserApi {
         return ResponseEntity.ok(user);
     }
 
-    private String login() {
-        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return principal.getUsername();
-    }
 }
