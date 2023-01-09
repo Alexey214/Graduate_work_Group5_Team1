@@ -54,3 +54,23 @@ create sequence ads_id_seq;
 create sequence ads_comment_id_seq;
 
 create sequence user_id_seq;
+
+-- changeset golenevav:5
+
+create sequence image_id_seq;
+
+-- changeset golenevav:6
+
+CREATE TABLE ads_pictures
+(
+    id         BIGINT NOT NULL,
+    file_path  VARCHAR(255),
+    file_size  BIGINT NOT NULL,
+    media_type VARCHAR(255),
+    image      BYTEA,
+    ads_id     INTEGER,
+    CONSTRAINT pk_ads_pictures PRIMARY KEY (id)
+);
+
+ALTER TABLE ads_pictures
+    ADD CONSTRAINT FK_ADS_PICTURES_ON_ADS FOREIGN KEY (ads_id) REFERENCES ads (id);

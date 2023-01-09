@@ -22,13 +22,17 @@ public class Ads {
     @Column(name = "id", nullable = false)
     private Integer pk;
     private String description;
-    private String image;
+
+    @OneToMany(mappedBy = "ads", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Image> image;
     private Integer price;
     private String title;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-
     private User author;
+
     @OneToMany(mappedBy = "pk", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<AdsComment> adsComment;
