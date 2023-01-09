@@ -8,11 +8,11 @@ public interface AdsService {
     /**
      * Метод для добавления комментариев к объявлению
      *
-     * @param ad_pk         ключ, соответствующий данному {@link AdsComment}
+     * @param adPk          ключ, соответствующий данному {@link AdsComment}
      * @param adsCommentDto сущность комментария с ключевым полем "text"
      * @return возвращает добавленный экземпляр {@link AdsCommentDto}
      */
-    AdsCommentDto addAdsComments(Integer ad_pk, AdsCommentDto adsCommentDto);
+    AdsCommentDto addAdsComments(Integer adPk, AdsCommentDto adsCommentDto);
 
     /**
      * Метод добавления объявления
@@ -57,19 +57,8 @@ public interface AdsService {
 
     /**
      * Метод загадка
-     *
-     * @param authenticated
-     * @param authorities0Authority
-     * @param credentials
-     * @param details
-     * @param principal
-     * @return
      */
-    ResponseWrapperAds getAdsMe(Boolean authenticated,
-                                String authorities0Authority,
-                                Object credentials,
-                                Object details,
-                                Object principal);
+    ResponseWrapperAds getAdsMe();
 
     /**
      * Получение полной информации об объявлении (в т.ч. об авторе)

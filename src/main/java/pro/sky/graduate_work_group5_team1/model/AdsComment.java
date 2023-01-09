@@ -17,7 +17,8 @@ import java.util.Objects;
 public class AdsComment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ads_comment_id_seq")
+    @SequenceGenerator(name = "ads_comment_id_seq", allocationSize = 1, initialValue = 1)
     @Column(name = "id", nullable = false)
     private Integer id;
     private LocalDateTime createdAt;

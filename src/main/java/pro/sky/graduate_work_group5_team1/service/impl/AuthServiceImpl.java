@@ -2,47 +2,59 @@ package pro.sky.graduate_work_group5_team1.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException;
+import pro.sky.graduate_work_group5_team1.model.User;
 import pro.sky.graduate_work_group5_team1.model.dto.RegReq;
+import pro.sky.graduate_work_group5_team1.repository.UserRepository;
 import pro.sky.graduate_work_group5_team1.service.AuthService;
+import pro.sky.graduate_work_group5_team1.util.UtilClassGraduate;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class AuthServiceImpl implements AuthService {
+public class AuthServiceImpl implements AuthService, UtilClassGraduate {
 
-    private final UserDetailsManager manager;
+    private final UserDetailsService manager;
     private final PasswordEncoder encoder;
+    private final UserRepository userRepository;
 
 
     @Override
     public boolean login(String userName, String password) {
-        log.info("Вход в систему пользователя userName: {}", userName);
-        if (!manager.userExists(userName)) {
-            log.warn("Неверное имя пользователя userName: {}", userName);
+        log.info("{}. Вход в систему пользователя userName: {}", methodName(), userName);
+        try {
+            UserDetails userDetails = manager.loadUserByUsername(userName);
+            String encryptedPassword = userDetails.getPassword();
+            String databaseUserPassword = userRepository.findByEmail(userName).get().getPassword();
+            return encryptedPassword.equals(databaseUserPassword);
+        } catch (UsernameNotFoundException | NoSuchElementException e) {
+            log.warn("{}. Неверное имя пользователя userName: {}", methodName(), userName);
             return false;
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        String encryptedPassword = userDetails.getPassword();
-        String encryptedPasswordWithoutEncryptionType = encryptedPassword.substring(8);
-        return encoder.matches(password, encryptedPasswordWithoutEncryptionType);
     }
 
     @Override
     public boolean register(RegReq registerReq, RegReq.RoleEnum role) {
-        log.debug("Регистрация пользователя userName: {}", registerReq.getUsername());
-        if (manager.userExists(registerReq.getUsername())) {
+        log.debug("{}. Регистрация пользователя userName: {}", methodName(), registerReq.getUsername());
+        Optional<User> user = userRepository.findByEmail(registerReq.getUsername());
+        if (user.isPresent()) {
             log.warn("Пользователь с данным именем userName: {}, уже существует", registerReq.getUsername());
-            return false;
+            throw new UserNotFoundException("Пользователь с данным именем userName: {}, уже существует" + registerReq.getUsername());
         }
-        manager.createUser(User.withDefaultPasswordEncoder()
-                .password(registerReq.getPassword())
-                .username(registerReq.getUsername())
-                .roles(role.name()).build());
+        User userTmp = new User();
+        String pass = encoder.encode(registerReq.getPassword());
+        userTmp.setEmail(registerReq.getUsername());
+        userTmp.setPassword(pass);
+        userTmp.setRoleEnum(role);
+        userRepository.save(userTmp);
         return true;
     }
 

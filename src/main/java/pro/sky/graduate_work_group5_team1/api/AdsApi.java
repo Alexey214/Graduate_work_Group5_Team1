@@ -27,7 +27,7 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<AdsCommentDto> addAdsComments(@Parameter(description = "ad_pk", required = true, schema = @Schema()) String adPk,
+    ResponseEntity<AdsCommentDto> addAdsComments(@Parameter(description = "adPk", required = true, schema = @Schema()) String adPk,
                                                  @Parameter(description = "comment", required = true, schema = @Schema()) @Valid AdsCommentDto adsCommentDto);
 
     @Operation(
@@ -52,7 +52,7 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "204", description = "No Content"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden")})
-    ResponseEntity<AdsCommentDto> deleteAdsComment(@Parameter(description = "ad_pk", required = true, schema = @Schema()) String adPk,
+    ResponseEntity<AdsCommentDto> deleteAdsComment(@Parameter(description = "adPk", required = true, schema = @Schema()) String adPk,
                                                    @Parameter(description = "id", required = true, schema = @Schema()) Integer id);
 
     @Operation(
@@ -77,7 +77,7 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<AdsCommentDto> getAdsComment(@Parameter(description = "ad_pk", required = true, schema = @Schema()) String adPk,
+    ResponseEntity<AdsCommentDto> getAdsComment(@Parameter(description = "adPk", required = true, schema = @Schema()) String adPk,
                                                 @Parameter(description = "id", required = true, schema = @Schema()) Integer id);
 
     @Operation(
@@ -90,7 +90,7 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<ResponseWrapperAdsComment> getAdsComments(@Parameter(description = "ad_pk", required = true, schema = @Schema()) String adPk);
+    ResponseEntity<ResponseWrapperAdsComment> getAdsComments(@Parameter(description = "adPk", required = true, schema = @Schema()) String adPk);
 
     @Operation(
             summary = "getAdsMe",
@@ -102,11 +102,7 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<ResponseWrapperAds> getAdsMe(@Parameter(schema = @Schema()) @Valid Boolean authenticated,
-                                                @Parameter(schema = @Schema()) @Valid String authorities0Authority,
-                                                @Parameter(schema = @Schema()) @Valid Object credentials,
-                                                @Parameter(schema = @Schema()) @Valid Object details,
-                                                @Parameter(schema = @Schema()) @Valid Object principal);
+    ResponseEntity<ResponseWrapperAds> getAdsMe();
 
     @Operation(
             summary = "getAds",
@@ -139,7 +135,7 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "204", description = "No Content"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden")})
-    ResponseEntity<AdsCommentDto> updateAdsComment(@Parameter(description = "ad_pk", required = true, schema = @Schema()) String adPk,
+    ResponseEntity<AdsCommentDto> updateAdsComment(@Parameter(description = "adPk", required = true, schema = @Schema()) String adPk,
                                                    @Parameter(description = "id", required = true, schema = @Schema()) Integer id,
                                                    @Parameter(description = "comment", required = true, schema = @Schema()) @Valid AdsCommentDto adsCommentDto);
 

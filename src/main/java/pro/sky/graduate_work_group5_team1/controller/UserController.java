@@ -29,8 +29,13 @@ public class UserController implements UserApi, UtilSecurity {
         if (id < 0) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        UserDto userDto = userService.getUser(id);
-        if (userDto == null) {
+        UserDto userDto = null;
+        try {
+            userDto = userService.getUser(id);
+            if (userDto == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(userDto);
@@ -47,7 +52,7 @@ public class UserController implements UserApi, UtilSecurity {
     }
 
     @Override
-    @PostMapping("/set_password")
+    @PostMapping("/setPassword")
     public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPassword) {
         try {
             NewPassword password = userService.setPassword(newPassword, login());
