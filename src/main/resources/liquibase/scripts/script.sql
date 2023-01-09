@@ -46,3 +46,11 @@ ALTER TABLE ads_comment
 
 ALTER TABLE ads_comment
     ADD CONSTRAINT FK_ADSCOMMENT_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
+
+-- changeset golenevav:4
+
+create sequence ads_id_seq;
+
+create sequence ads_comment_id_seq;
+
+create sequence user_id_seq;

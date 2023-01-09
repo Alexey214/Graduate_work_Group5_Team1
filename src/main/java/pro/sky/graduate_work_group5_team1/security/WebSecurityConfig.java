@@ -3,6 +3,7 @@ package pro.sky.graduate_work_group5_team1.security;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +17,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableConfigurationProperties
+@EnableGlobalAuthentication
 public class WebSecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
@@ -24,10 +26,9 @@ public class WebSecurityConfig {
             "/v3/api-docs",
             "/webjars/**",
             "/login", "/register",
-//            "/users/*",
-//            "/ads/*", "/ads", "/newAd",
-//            "/ads/*/comments", "/ads/*/comments/*",
-//            "**"
+            "/ads", "/ads/*",
+            "/ads/*/comments", "/ads/*/comments/*",
+            "/users", "/users/*", "/users/me"
     };
 
 //    @Bean
@@ -51,18 +52,26 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+        return http
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
-                                authz
-                                        .mvcMatchers(AUTH_WHITELIST).permitAll()
-                                        .mvcMatchers("/ads/**", "/users/**").authenticated()
-//                                .mvcMatchers(AUTH_WHITELIST).authenticated()
-
+                        authz
+                                .mvcMatchers(AUTH_WHITELIST).permitAll()
+                                .anyRequest()
+                                .authenticated()
                 )
-                .cors().disable()
-                .httpBasic(withDefaults());
-        return http.build();
+                .cors().
+                and()
+                .httpBasic(withDefaults())
+//                .authorizeRequests()
+//                .antMatchers("/users/**", "/users/me").access("hasRole('USER')")
+////                .antMatchers("/login", "/register").permitAll()
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+////                .defaultSuccessUrl("/profile")
+//                .and()
+                .build();
     }
 
     @Bean

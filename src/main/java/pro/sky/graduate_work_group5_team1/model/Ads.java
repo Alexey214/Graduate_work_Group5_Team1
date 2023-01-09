@@ -17,7 +17,8 @@ import java.util.Objects;
 public class Ads {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ads_id_seq")
+    @SequenceGenerator(name = "ads_id_seq", allocationSize = 1, initialValue = 1)
     @Column(name = "id", nullable = false)
     private Integer pk;
     private String description;
@@ -26,7 +27,7 @@ public class Ads {
     private String title;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    @ToString.Exclude
+
     private User author;
     @OneToMany(mappedBy = "pk", fetch = FetchType.LAZY)
     @ToString.Exclude

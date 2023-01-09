@@ -102,11 +102,7 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<ResponseWrapperAds> getAdsMe(@Parameter(schema = @Schema()) @Valid Boolean authenticated,
-                                                @Parameter(schema = @Schema()) @Valid String authorities0Authority,
-                                                @Parameter(schema = @Schema()) @Valid Object credentials,
-                                                @Parameter(schema = @Schema()) @Valid Object details,
-                                                @Parameter(schema = @Schema()) @Valid Object principal);
+    ResponseEntity<ResponseWrapperAds> getAdsMe();
 
     @Operation(
             summary = "getAds",

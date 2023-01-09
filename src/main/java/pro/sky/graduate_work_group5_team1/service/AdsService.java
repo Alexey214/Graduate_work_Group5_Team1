@@ -57,19 +57,8 @@ public interface AdsService {
 
     /**
      * Метод загадка
-     *
-     * @param authenticated
-     * @param authorities0Authority
-     * @param credentials
-     * @param details
-     * @param principal
-     * @return
      */
-    ResponseWrapperAds getAdsMe(Boolean authenticated,
-                                String authorities0Authority,
-                                Object credentials,
-                                Object details,
-                                Object principal);
+    ResponseWrapperAds getAdsMe();
 
     /**
      * Получение полной информации об объявлении (в т.ч. об авторе)

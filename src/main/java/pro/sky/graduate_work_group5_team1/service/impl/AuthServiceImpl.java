@@ -12,13 +12,15 @@ import pro.sky.graduate_work_group5_team1.model.User;
 import pro.sky.graduate_work_group5_team1.model.dto.RegReq;
 import pro.sky.graduate_work_group5_team1.repository.UserRepository;
 import pro.sky.graduate_work_group5_team1.service.AuthService;
+import pro.sky.graduate_work_group5_team1.util.UtilClassGraduate;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class AuthServiceImpl implements AuthService {
+public class AuthServiceImpl implements AuthService, UtilClassGraduate {
 
     private final UserDetailsService manager;
     private final PasswordEncoder encoder;
@@ -27,21 +29,21 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean login(String userName, String password) {
-        log.info("Вход в систему пользователя userName: {}", userName);
+        log.info("{}. Вход в систему пользователя userName: {}", methodName(), userName);
         try {
             UserDetails userDetails = manager.loadUserByUsername(userName);
             String encryptedPassword = userDetails.getPassword();
             String databaseUserPassword = userRepository.findByEmail(userName).get().getPassword();
             return encryptedPassword.equals(databaseUserPassword);
-        } catch (UsernameNotFoundException e) {
-            log.warn("Неверное имя пользователя userName: {}", userName);
+        } catch (UsernameNotFoundException | NoSuchElementException e) {
+            log.warn("{}. Неверное имя пользователя userName: {}", methodName(), userName);
             return false;
         }
     }
 
     @Override
     public boolean register(RegReq registerReq, RegReq.RoleEnum role) {
-        log.debug("Регистрация пользователя userName: {}", registerReq.getUsername());
+        log.debug("{}. Регистрация пользователя userName: {}", methodName(), registerReq.getUsername());
         Optional<User> user = userRepository.findByEmail(registerReq.getUsername());
         if (user.isPresent()) {
             log.warn("Пользователь с данным именем userName: {}, уже существует", registerReq.getUsername());

@@ -102,12 +102,12 @@ public class AdsController implements AdsApi {
      */
     @Override
     @GetMapping("/me")
-    public ResponseEntity<ResponseWrapperAds> getAdsMe(@RequestParam(value = "authenticated", required = false) Boolean authenticated,
-                                                       @RequestParam(value = "authorities[0].authority", required = false) String authorities0Authority,
-                                                       @RequestParam(value = "credentials", required = false) Object credentials,
-                                                       @RequestParam(value = "details", required = false) Object details,
-                                                       @RequestParam(value = "principal", required = false) Object principal) {
-        return null;
+    public ResponseEntity<ResponseWrapperAds> getAdsMe() {
+        ResponseWrapperAds responseWrapperAds = adsService.getAdsMe();
+        if (responseWrapperAds.getCount() == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(responseWrapperAds);
     }
 
     @Override

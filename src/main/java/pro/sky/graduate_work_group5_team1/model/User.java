@@ -25,7 +25,8 @@ import java.util.Objects;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
+    @SequenceGenerator(name = "user_id_seq", allocationSize = 1, initialValue = 1)
     private Integer id;
     private String email;
     private String firstName;
