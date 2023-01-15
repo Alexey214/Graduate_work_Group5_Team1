@@ -18,7 +18,7 @@ import java.nio.file.Path;
 
 @RestController
 public class AdsPhotoController {
-    AdsPhotoServiceImpl adsPhotoServiceImpl;
+    private final AdsPhotoServiceImpl adsPhotoServiceImpl;
 
     public AdsPhotoController(AdsPhotoServiceImpl adsPhotoServiceImpl) {
         this.adsPhotoServiceImpl = adsPhotoServiceImpl;
@@ -37,18 +37,5 @@ public class AdsPhotoController {
         headers.setContentType(MediaType.parseMediaType(adsPhoto.getMediaType()));
         headers.setContentLength(adsPhoto.getData().length);
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adsPhoto.getData());
-    }
-
-    @GetMapping(value = "/{id}/photo-from-file")
-    public void downloadPhoto(@PathVariable Long id, HttpServletResponse response) throws IOException {
-        AdsPhoto adsPhoto = adsPhotoServiceImpl.findAdsPhoto(id);
-        Path path = Path.of(adsPhoto.getFilePath());
-        try (InputStream is = Files.newInputStream(path);
-             OutputStream os = response.getOutputStream();) {
-            response.setStatus(200);
-            response.setContentType(adsPhoto.getMediaType());
-            response.setContentLength((int) adsPhoto.getFileSize());
-            is.transferTo(os);
-        }
     }
 }

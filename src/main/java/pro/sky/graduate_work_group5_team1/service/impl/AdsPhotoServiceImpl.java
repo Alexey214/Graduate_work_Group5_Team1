@@ -20,8 +20,8 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 public class AdsPhotoServiceImpl implements AdsPhotoService {
-    AdsPhotoRepository adsPhotoRepository;
-    AdsRepository adsRepository;
+    private final AdsPhotoRepository adsPhotoRepository;
+    private final AdsRepository adsRepository;
 
     public AdsPhotoServiceImpl(AdsPhotoRepository adsPhotoRepository, AdsRepository adsRepository) {
         this.adsPhotoRepository = adsPhotoRepository;
@@ -62,7 +62,7 @@ public class AdsPhotoServiceImpl implements AdsPhotoService {
     public AdsPhoto findAdsPhoto(long adsId) {
         logger.debug("method findAdsPhoto is started");
         AdsPhoto adsPhoto = new AdsPhoto();
-        adsPhoto = adsPhotoRepository.findById(adsId).get();
+        adsPhoto = adsPhotoRepository.findAdsPhotoByAds_Pk((int) adsId);
         return adsPhoto;
     }
 }

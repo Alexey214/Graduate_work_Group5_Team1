@@ -14,6 +14,7 @@ import java.util.Objects;
 public class AdsPhoto {
 
     @Id
+    @GeneratedValue
     private Long id;
     private String filePath;
     private long fileSize;
@@ -21,7 +22,6 @@ public class AdsPhoto {
     private byte[] data;
     @OneToOne
     @ToStringExclude
-    @MapsId
     private Ads ads;
 
     @Override
