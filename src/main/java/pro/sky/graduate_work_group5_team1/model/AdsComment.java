@@ -25,9 +25,11 @@ public class AdsComment {
     private String text;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ads_id")
+    @ToString.Exclude
     private Ads pk;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
+    @ToString.Exclude
     private User author;
 
     @Override

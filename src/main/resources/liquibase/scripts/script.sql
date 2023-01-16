@@ -55,22 +55,19 @@ create sequence ads_comment_id_seq;
 
 create sequence user_id_seq;
 
--- changeset golenevav:5
+-- changeset shilovkirill:5
+CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START WITH 1 INCREMENT BY 1;
 
-create sequence image_id_seq;
-
--- changeset golenevav:6
-
-CREATE TABLE ads_pictures
+CREATE TABLE ads_photo
 (
     id         BIGINT NOT NULL,
     file_path  VARCHAR(255),
     file_size  BIGINT NOT NULL,
     media_type VARCHAR(255),
-    image      BYTEA,
+    data       BYTEA,
     ads_id     INTEGER,
-    CONSTRAINT pk_ads_pictures PRIMARY KEY (id)
+    CONSTRAINT pk_adsphoto PRIMARY KEY (id)
 );
 
-ALTER TABLE ads_pictures
-    ADD CONSTRAINT FK_ADS_PICTURES_ON_ADS FOREIGN KEY (ads_id) REFERENCES ads (id);
+ALTER TABLE ads_photo
+    ADD CONSTRAINT FK_ADSPHOTO_ON_ADS FOREIGN KEY (ads_id) REFERENCES ads (id);
