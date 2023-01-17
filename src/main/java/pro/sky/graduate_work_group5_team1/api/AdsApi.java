@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
 
 import javax.validation.Valid;
@@ -35,15 +36,12 @@ public interface AdsApi {
             description = "Добавить объявления",
             tags = "Объявления",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(
+                    @ApiResponse(responseCode = "201", description = "Created", content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = AdsDto.class))),
-                    @ApiResponse(responseCode = "201", description = "Created"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
-                    @ApiResponse(responseCode = "403", description = "Forbidden"),
-                    @ApiResponse(responseCode = "404", description = "Not Found")})
+                    @ApiResponse(responseCode = "401", description = "Unauthorized")})
     ResponseEntity<AdsDto> addAds(@Parameter(description = "createAds", required = true, schema = @Schema())
-                                  @Valid CreateAds createAds);
+                                  @Valid CreateAds createAds, MultipartFile multipartFile);
 
     @Operation(
             summary = "deleteAdsComment",

@@ -55,16 +55,16 @@ create sequence ads_comment_id_seq;
 
 create sequence user_id_seq;
 
--- changeset shilovkirill:5
-CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START WITH 1 INCREMENT BY 1;
+create sequence photo_id_seq;
 
+-- changeset shilovkirill:5
 CREATE TABLE ads_photo
 (
     id         BIGINT NOT NULL,
     file_path  VARCHAR(255),
     file_size  BIGINT NOT NULL,
     media_type VARCHAR(255),
-    data       BYTEA,
+    data       OID,
     ads_id     INTEGER,
     CONSTRAINT pk_adsphoto PRIMARY KEY (id)
 );

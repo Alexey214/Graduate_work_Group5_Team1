@@ -3,11 +3,15 @@ package pro.sky.graduate_work_group5_team1.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pro.sky.graduate_work_group5_team1.api.AdsApi;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
 import pro.sky.graduate_work_group5_team1.service.AdsService;
+
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
@@ -19,7 +23,7 @@ public class AdsController implements AdsApi {
     private final AdsService adsService;
 
     @Override
-    @PostMapping("/{adPk}/comment")
+    @PostMapping("/{adPk}/comments")
     public ResponseEntity<AdsCommentDto> addAdsComments(@PathVariable("adPk") String adPk,
                                                         @RequestBody AdsCommentDto adsCommentDto) {
         if (Integer.parseInt(adPk) < 0 || adsCommentDto == null) {
@@ -33,8 +37,9 @@ public class AdsController implements AdsApi {
     }
 
     @Override
-    @PostMapping
-    public ResponseEntity<AdsDto> addAds(@RequestBody CreateAds createAds) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdsDto> addAds(@RequestPart("properties") CreateAds createAds,
+                                         @RequestPart("image") MultipartFile multipartFile) {
         if (createAds == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -83,7 +88,7 @@ public class AdsController implements AdsApi {
     }
 
     @Override
-    @GetMapping("/{adPk}/comment")
+    @GetMapping("/{adPk}/comments")
     public ResponseEntity<ResponseWrapperAdsComment> getAdsComments(@PathVariable("adPk") String adPk) {
         if (Integer.parseInt(adPk) < 0) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

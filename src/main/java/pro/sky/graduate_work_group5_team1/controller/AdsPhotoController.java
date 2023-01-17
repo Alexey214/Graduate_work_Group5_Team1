@@ -7,32 +7,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.graduate_work_group5_team1.model.AdsPhoto;
-import pro.sky.graduate_work_group5_team1.service.impl.AdsPhotoServiceImpl;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import pro.sky.graduate_work_group5_team1.service.impl.AdsPhotoService;
 
 @RestController
 public class AdsPhotoController {
-    private final AdsPhotoServiceImpl adsPhotoServiceImpl;
 
-    public AdsPhotoController(AdsPhotoServiceImpl adsPhotoServiceImpl) {
-        this.adsPhotoServiceImpl = adsPhotoServiceImpl;
+    private final AdsPhotoService adsPhotoService;
+
+    public AdsPhotoController(AdsPhotoService adsPhotoService) {
+        this.adsPhotoService = adsPhotoService;
     }
 
     @PostMapping(value = "/{adsId}/adsPhoto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadPhoto(@PathVariable Long adsId, @RequestParam MultipartFile adsPhoto) throws Exception {
-        adsPhotoServiceImpl.uploadPhoto(adsId, adsPhoto);
+        adsPhotoService.uploadPhoto(adsId, adsPhoto);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/{id}/photo-from-db")
     public ResponseEntity<byte[]> downloadPhoto(@PathVariable Long id) {
-        AdsPhoto adsPhoto = adsPhotoServiceImpl.findAdsPhoto(id);
+        AdsPhoto adsPhoto = adsPhotoService.findAdsPhoto(id);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(adsPhoto.getMediaType()));
         headers.setContentLength(adsPhoto.getData().length);
