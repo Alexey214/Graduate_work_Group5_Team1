@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pro.sky.graduate_work_group5_team1.exeption.AdsCommentNotFoundException;
 import pro.sky.graduate_work_group5_team1.exeption.AdsNotFoundException;
 import pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException;
@@ -18,6 +19,7 @@ import pro.sky.graduate_work_group5_team1.repository.AdsRepository;
 import pro.sky.graduate_work_group5_team1.repository.AdsCommentRepository;
 import pro.sky.graduate_work_group5_team1.repository.UserRepository;
 import pro.sky.graduate_work_group5_team1.security.UtilSecurity;
+import pro.sky.graduate_work_group5_team1.service.AdsPhotoService;
 import pro.sky.graduate_work_group5_team1.service.AdsService;
 import pro.sky.graduate_work_group5_team1.util.UtilClassGraduate;
 
@@ -36,6 +38,8 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     private final AdsCommentRepository adsCommentRepository;
     private final UserRepository userRepository;
 
+    private final AdsPhotoService adsPhotoService;
+
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public AdsCommentDto addAdsComments(Integer adPk, AdsCommentDto adsCommentDto) {
@@ -47,18 +51,18 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
 
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
-    public AdsDto addAds(CreateAds createAds) {
+    public AdsDto addAds(CreateAds createAds, MultipartFile file, User user) {
         log.debug("{}. Добавляем объявление с title {}:", methodName(), createAds.getTitle());
         Ads adsToCommit = new Ads();
 
         adsToCommit.setDescription(createAds.getDescription());
-        adsToCommit.setImage(createAds.getImage());
-        adsToCommit.setPk(createAds.getPk());
         adsToCommit.setPrice(createAds.getPrice());
         adsToCommit.setTitle(createAds.getTitle());
+        String photoPath = adsPhotoService.savePhoto(file);
+        adsToCommit.setImage(photoPath);
+        adsToCommit.setAuthor(user);
 
         adsRepository.save(adsToCommit);
-
         return adsMapper.toDto(adsToCommit);
     }
 

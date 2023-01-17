@@ -18,7 +18,7 @@ public class Ads {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ads_id_seq")
-    @SequenceGenerator(name = "ads_id_seq", allocationSize = 1, initialValue = 1)
+    @SequenceGenerator(name = "ads_id_seq", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Integer pk;
     private String description;
@@ -27,7 +27,7 @@ public class Ads {
     private Integer price;
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User author;
 

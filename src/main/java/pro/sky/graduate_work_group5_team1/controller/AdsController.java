@@ -5,9 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.graduate_work_group5_team1.api.AdsApi;
+import pro.sky.graduate_work_group5_team1.model.User;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
 import pro.sky.graduate_work_group5_team1.service.AdsService;
 
@@ -38,12 +41,14 @@ public class AdsController implements AdsApi {
 
     @Override
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdsDto> addAds(@RequestPart("properties") CreateAds createAds,
-                                         @RequestPart("image") MultipartFile multipartFile) {
-        if (createAds == null) {
+    public ResponseEntity<AdsDto> addAds(@Valid @RequestPart("properties")  CreateAds createAds,
+                                         @RequestPart("image") MultipartFile file) {
+        if (createAds == null || file == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        AdsDto adsDto = adsService.addAds(createAds);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        AdsDto adsDto = adsService.addAds(createAds, file, user);
         if (adsDto == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.ok(adsDto);
