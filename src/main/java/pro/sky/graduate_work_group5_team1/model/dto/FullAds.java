@@ -1,9 +1,6 @@
 package pro.sky.graduate_work_group5_team1.model.dto;
 
 import lombok.Data;
-import pro.sky.graduate_work_group5_team1.model.Image;
-
-import java.util.List;
 
 /**
  * FullAds
@@ -15,7 +12,7 @@ public class FullAds {
     private String authorLastName;
     private String description;
     private String email;
-    private List<Image> image;
+    private String image;
     private String phone;
     private Integer pk;
     private Integer price;

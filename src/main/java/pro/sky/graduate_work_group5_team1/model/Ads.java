@@ -23,9 +23,7 @@ public class Ads {
     private Integer pk;
     private String description;
 
-    @OneToMany(mappedBy = "ads", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<Image> image;
+    private String image;
     private Integer price;
     private String title;
 
