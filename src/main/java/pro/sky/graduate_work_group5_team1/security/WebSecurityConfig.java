@@ -60,8 +60,7 @@ public class WebSecurityConfig {
                                 .anyRequest()
                                 .authenticated()
                 )
-                .cors().
-                and()
+                .cors().disable()
                 .httpBasic(withDefaults())
 //                .authorizeRequests()
 //                .antMatchers("/users/**", "/users/me").access("hasRole('USER')")

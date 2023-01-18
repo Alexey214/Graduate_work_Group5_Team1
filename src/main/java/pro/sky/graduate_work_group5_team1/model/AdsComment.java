@@ -23,11 +23,11 @@ public class AdsComment {
     private Integer id;
     private LocalDateTime createdAt;
     private String text;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ads_id")
     @ToString.Exclude
     private Ads pk;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private User author;

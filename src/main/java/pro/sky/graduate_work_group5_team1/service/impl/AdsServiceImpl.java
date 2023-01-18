@@ -23,6 +23,7 @@ import pro.sky.graduate_work_group5_team1.service.AdsPhotoService;
 import pro.sky.graduate_work_group5_team1.service.AdsService;
 import pro.sky.graduate_work_group5_team1.util.UtilClassGraduate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -45,6 +46,9 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     @Override
     public AdsCommentDto addAdsComments(Integer adPk, AdsCommentDto adsCommentDto) {
         log.debug("{}. Добавляем комментарий {}, принадлежащий объявлению с ключом {}", methodName(), adsCommentDto, adPk);
+        adsCommentDto.setAuthor(userRepository.findByEmail(login()).get().getId());
+        adsCommentDto.setCreatedAt(LocalDateTime.now());
+        adsCommentDto.setPk(adPk);
         AdsComment adsComment = adsCommentMapper.toModel(adsCommentDto);
         adsCommentRepository.save(adsComment);
         return adsCommentMapper.toDto(adsComment);
