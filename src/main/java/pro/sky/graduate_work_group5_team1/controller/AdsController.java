@@ -41,7 +41,7 @@ public class AdsController implements AdsApi {
 
     @Override
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdsDto> addAds(@Valid @RequestPart("properties")  CreateAds createAds,
+    public ResponseEntity<AdsDto> addAds(@RequestPart("properties") CreateAds createAds,
                                          @RequestPart("image") MultipartFile file) {
         if (createAds == null || file == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -99,8 +99,12 @@ public class AdsController implements AdsApi {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         ResponseWrapperAdsComment responseWrapperAdsComment = adsService.getAdsComments(Integer.parseInt(adPk));
-        if (responseWrapperAdsComment.getCount() == 0) {
-            ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        try {
+            if (responseWrapperAdsComment.getCount() == 0) {
+                ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(responseWrapperAdsComment);
     }
@@ -127,7 +131,7 @@ public class AdsController implements AdsApi {
         if (fullAds == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return null;
+        return ResponseEntity.ok(fullAds);
     }
 
     @Override
