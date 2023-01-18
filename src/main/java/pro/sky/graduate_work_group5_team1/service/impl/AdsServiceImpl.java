@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -73,11 +74,11 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
 
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
-    public AdsCommentDto deleteAdsComment(Integer adPk, Integer id) {
+    public AdsCommentDto deleteAdsComment(Integer adPk, Integer id, User user) {
         log.info("{}. Удаляем комментарий с id {}, относящийся к объявлению с ключом {}", methodName(), id, adPk);
         AdsComment adsComment = adsCommentRepository.findAdsCommentByPkAndId(adPk, id)
                 .orElseThrow(AdsCommentNotFoundException::new);
-        if (adsComment != null) {
+        if (Objects.equals(adsComment.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
             adsCommentRepository.deleteById(adsComment.getId());
             log.warn("Комментарий с id {} удален", id);
         }
@@ -166,10 +167,10 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
 
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
-    public AdsDto removeAds(Integer id) {
+    public AdsDto removeAds(Integer id, User user) {
         log.info("{}. Удаляем объявление с id {}:", methodName(), id);
         Ads ads = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
-        if (ads != null) {
+        if (Objects.equals(ads.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
             adsRepository.deleteById(id);
             log.warn("{}. Объявление с id {} удалено", methodName(), id);
         }
@@ -178,40 +179,49 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
 
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
-    public AdsCommentDto updateAdsComment(Integer adPk, Integer id, AdsCommentDto adsCommentDto) {
+    public AdsCommentDto updateAdsComment(Integer adPk, Integer id, AdsCommentDto adsCommentDto, User user) {
         AdsComment adsComment = adsCommentRepository.findAdsCommentByPkAndId(adPk, id)
                 .orElseThrow(AdsCommentNotFoundException::new);
-        log.debug("{}. Изменяем комментарий {}, принадлежащее пользователю с id {} и относящийся к объявлению с ключом {}",
-                methodName(), adsComment, id, adPk);
-        adsComment.setAuthor(userRepository.findById(id).orElseThrow(UserNotFoundException::new));
-        adsComment.setPk(adsRepository.findById(adPk).orElseThrow(AdsNotFoundException::new));
-        adsComment.setText(adsComment.getText());
-        adsComment.setCreatedAt(adsCommentDto.getCreatedAt());
-        adsCommentRepository.save(adsComment);
+        if (Objects.equals(adsComment.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
+            log.debug("{}. Изменяем комментарий {}, принадлежащее пользователю с id {} и относящийся к объявлению с ключом {}",
+                    methodName(), adsComment, id, adPk);
+            adsComment.setAuthor(userRepository.findById(id).orElseThrow(UserNotFoundException::new));
+            adsComment.setPk(adsRepository.findById(adPk).orElseThrow(AdsNotFoundException::new));
+            adsComment.setText(adsComment.getText());
+            adsComment.setCreatedAt(adsCommentDto.getCreatedAt());
+            adsCommentRepository.save(adsComment);
+        }
         return adsCommentDto;
     }
 
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
-    public AdsDto updateAds(Integer id, CreateAds createAds) {
+    public AdsDto updateAds(Integer id, CreateAds createAds, User user) {
         log.debug("{}. Изменяем объявление {}", methodName(), id);
         Ads adsToPatch = adsRepository.findById(id).get();
-        adsToPatch.setDescription(createAds.getDescription());
-        adsToPatch.setTitle(createAds.getTitle());
-        adsToPatch.setPrice(createAds.getPrice());
-        AdsDto adsDto = adsMapper.toDto(adsToPatch);
-        adsDto.setPk(id);
-        adsRepository.save(adsToPatch);
-        return adsDto;
+        if (Objects.equals(adsToPatch.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
+            adsToPatch.setDescription(createAds.getDescription());
+            adsToPatch.setTitle(createAds.getTitle());
+            adsToPatch.setPrice(createAds.getPrice());
+            AdsDto adsDto = adsMapper.toDto(adsToPatch);
+            adsDto.setPk(id);
+            adsRepository.save(adsToPatch);
+            return adsDto;
+        }
+        return null;
     }
 
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
-    public void patchAdsImage(Integer id, MultipartFile file) {
+    public Integer patchAdsImage(Integer id, MultipartFile file, User user) {
         log.debug("{}. Изменяем картинку в объявлении {}", methodName(), id);
         Ads adsToPatch = adsRepository.findById(id).get();
-        String[] imagePath = adsToPatch.getImage().split("/");
-        Integer imageId = Integer.parseInt(imagePath[imagePath.length - 1]);
-        adsPhotoService.patchPhoto(imageId, file);
+        if (Objects.equals(adsToPatch.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
+            String[] imagePath = adsToPatch.getImage().split("/");
+            Integer imageId = Integer.parseInt(imagePath[imagePath.length - 1]);
+            adsPhotoService.patchPhoto(imageId, file);
+            return 1;
+        }
+        return 0;
     }
 }
