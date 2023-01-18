@@ -14,8 +14,6 @@ import pro.sky.graduate_work_group5_team1.model.User;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
 import pro.sky.graduate_work_group5_team1.service.AdsService;
 
-import javax.validation.Valid;
-
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -167,15 +165,15 @@ public class AdsController implements AdsApi {
 
     @Override
     @PatchMapping("/{id}")
-    public ResponseEntity<AdsDto> updateAds(@PathVariable("id") Integer id, @RequestBody AdsDto adsDto) {
-        if (id < 0 && adsDto == null) {
+    public ResponseEntity<AdsDto> updateAds(@PathVariable("id") Integer id, @RequestBody CreateAds createAds) {
+        if (id < 0 && createAds == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        AdsDto adsDtoTmp = adsService.updateAds(id, adsDto);
+        AdsDto adsDtoTmp = adsService.updateAds(id, createAds);
         if (adsDtoTmp == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(adsDto);
+        return ResponseEntity.ok(adsDtoTmp);
     }
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

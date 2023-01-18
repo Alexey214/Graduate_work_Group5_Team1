@@ -193,11 +193,15 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
 
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
-    public AdsDto updateAds(Integer id, AdsDto adsDto) {
-        log.debug("{}. Изменяем объявление {}, принадлежащее пользователю с id {}", methodName(), adsDto, id);
-        Ads ads = adsMapper.toModel(adsDto);
-        ads.setPk(id);
-        adsRepository.save(ads);
+    public AdsDto updateAds(Integer id, CreateAds createAds) {
+        log.debug("{}. Изменяем объявление {}", methodName(), id);
+        Ads adsToPatch = adsRepository.findById(id).get();
+        adsToPatch.setDescription(createAds.getDescription());
+        adsToPatch.setTitle(createAds.getTitle());
+        adsToPatch.setPrice(createAds.getPrice());
+        AdsDto adsDto = adsMapper.toDto(adsToPatch);
+        adsDto.setPk(id);
+        adsRepository.save(adsToPatch);
         return adsDto;
     }
 

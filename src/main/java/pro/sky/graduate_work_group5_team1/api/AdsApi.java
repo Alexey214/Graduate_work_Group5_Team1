@@ -148,5 +148,6 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden")})
     ResponseEntity<AdsDto> updateAds(@Parameter(description = "id", required = true, schema = @Schema()) Integer id,
-                                     @Parameter(description = "ads", required = true, schema = @Schema()) @Valid AdsDto adsDto);
+                                     @Parameter(description = "ads", required = true, schema = @Schema()) @Valid CreateAds createAds);
+
 }

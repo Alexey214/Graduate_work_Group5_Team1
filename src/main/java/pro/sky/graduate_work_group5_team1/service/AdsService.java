@@ -92,10 +92,10 @@ public interface AdsService {
      * Метод изменения объявления
      *
      * @param id     идентификатор объявления
-     * @param adsDto изменённое объявление
+     * @param createAds изменённое объявление
      * @return возвращает изменённый экземпляр {@link AdsDto}
      */
-    AdsDto updateAds(Integer id, AdsDto adsDto);
+    AdsDto updateAds(Integer id, CreateAds createAds);
 
     void patchAdsImage(Integer id, MultipartFile file);
 }
