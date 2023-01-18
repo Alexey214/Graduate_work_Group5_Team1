@@ -114,9 +114,6 @@ public class AdsController implements AdsApi {
     @GetMapping("/me")
     public ResponseEntity<ResponseWrapperAds> getAdsMe() {
         ResponseWrapperAds responseWrapperAds = adsService.getAdsMe();
-        if (responseWrapperAds.getCount() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
         return ResponseEntity.ok(responseWrapperAds);
     }
 
