@@ -1,6 +1,8 @@
 package pro.sky.graduate_work_group5_team1.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import pro.sky.graduate_work_group5_team1.model.AdsComment;
+import pro.sky.graduate_work_group5_team1.model.User;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
 
 public interface AdsService {
@@ -20,7 +22,7 @@ public interface AdsService {
      * @param createAds экземпляр нового объявления
      * @return возвращает экземпляр класса {@link AdsDto}
      */
-    AdsDto addAds(CreateAds createAds);
+    AdsDto addAds(CreateAds createAds, MultipartFile file, User userId);
 
     /**
      * Метод для удаления комментария

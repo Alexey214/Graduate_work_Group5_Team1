@@ -14,6 +14,11 @@ public class AdsPhotoController {
 
     private final AdsPhotoService adsPhotoService;
 
+    @GetMapping(value = "/images/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
+    public byte[] getImage(@PathVariable("id") Long id) {
+        return adsPhotoService.getPhoto(id);
+    }
+
     public AdsPhotoController(AdsPhotoService adsPhotoService) {
         this.adsPhotoService = adsPhotoService;
     }

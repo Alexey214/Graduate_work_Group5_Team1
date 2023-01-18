@@ -3,7 +3,9 @@ package pro.sky.graduate_work_group5_team1.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.graduate_work_group5_team1.model.Ads;
 import pro.sky.graduate_work_group5_team1.model.AdsPhoto;
@@ -47,12 +49,34 @@ public class AdsPhotoService implements pro.sky.graduate_work_group5_team1.servi
             bis.transferTo(bos);
         }
         AdsPhoto adsPhoto = findAdsPhoto(adsId);
-        adsPhoto.setAds(ads);
         adsPhoto.setFilePath(filePath.toString());
         adsPhoto.setFileSize(adsPhotoFile.getSize());
         adsPhoto.setMediaType(adsPhotoFile.getContentType());
         adsPhoto.setData(adsPhotoFile.getBytes());
         adsPhotoRepository.save(adsPhoto);
+    }
+
+    public String savePhoto(MultipartFile file) {
+        AdsPhoto adsPhoto = new AdsPhoto();
+        adsPhoto.setFileSize(file.getSize());
+        adsPhoto.setMediaType(file.getContentType());
+        String fileName = file.getOriginalFilename();
+        assert fileName != null;
+        try {
+            adsPhoto.setData(file.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Long photoId = adsPhotoRepository.save(adsPhoto).getId();
+        return "/images/" + photoId;
+    }
+
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
+    @Transactional
+    @Override
+    public byte[] getPhoto(Long id) {
+        AdsPhoto photo = adsPhotoRepository.getReferenceById(id);
+        return photo.getData();
     }
 
     private String getExtensions(String fileName) {
