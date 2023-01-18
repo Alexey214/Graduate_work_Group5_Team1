@@ -99,9 +99,11 @@ public class AdsController implements AdsApi {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         ResponseWrapperAdsComment responseWrapperAdsComment = adsService.getAdsComments(Integer.parseInt(adPk));
-        if (responseWrapperAdsComment.getCount() == 0) {
-            ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        try {
+            if (responseWrapperAdsComment.getCount() == 0) {
+                ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } catch (Exception e) {}
         return ResponseEntity.ok(responseWrapperAdsComment);
     }
 
@@ -124,10 +126,13 @@ public class AdsController implements AdsApi {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         FullAds fullAds = adsService.getAds(id);
+        fullAds.setAuthorFirstName("kek");
+        fullAds.setAuthorLastName("lol");
+        fullAds.setPhone("+799999999999999");
         if (fullAds == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return null;
+        return ResponseEntity.ok(fullAds);
     }
 
     @Override
