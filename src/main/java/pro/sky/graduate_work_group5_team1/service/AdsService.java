@@ -96,4 +96,6 @@ public interface AdsService {
      * @return возвращает изменённый экземпляр {@link AdsDto}
      */
     AdsDto updateAds(Integer id, AdsDto adsDto);
+
+    void patchAdsImage(Integer id, MultipartFile file);
 }

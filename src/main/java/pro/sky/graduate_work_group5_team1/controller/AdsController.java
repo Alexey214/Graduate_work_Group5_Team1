@@ -178,5 +178,9 @@ public class AdsController implements AdsApi {
         return ResponseEntity.ok(adsDto);
     }
 
-
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdsDto> updateAdsImage(@PathVariable("id") Integer id, @RequestPart("image") MultipartFile file) {
+        adsService.patchAdsImage(id, file);
+        return ResponseEntity.ok(null);
+    }
 }

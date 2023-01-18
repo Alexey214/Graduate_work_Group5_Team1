@@ -200,4 +200,14 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
         adsRepository.save(ads);
         return adsDto;
     }
+
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
+    @Override
+    public void patchAdsImage(Integer id, MultipartFile file) {
+        log.debug("{}. Изменяем картинку в объявлении {}", methodName(), id);
+        Ads adsToPatch = adsRepository.findById(id).get();
+        String[] imagePath = adsToPatch.getImage().split("/");
+        Integer imageId = Integer.parseInt(imagePath[imagePath.length - 1]);
+        adsPhotoService.patchPhoto(imageId, file);
+    }
 }

@@ -79,10 +79,24 @@ public class AdsPhotoService implements pro.sky.graduate_work_group5_team1.servi
         return photo.getData();
     }
 
+    @Override
+    public void patchPhoto(Integer imageId, MultipartFile file) {
+        AdsPhoto adsPhotoToPatch = adsPhotoRepository.findById(imageId.longValue()).get();
+        try {
+            adsPhotoToPatch.setData(file.getBytes());
+            adsPhotoToPatch.setFileSize(file.getSize());
+            adsPhotoToPatch.setMediaType(file.getContentType());
+            adsPhotoRepository.save(adsPhotoToPatch);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private String getExtensions(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     public AdsPhoto findAdsPhoto(long adsId) {
         logger.debug("method findAdsPhoto is started");
         AdsPhoto adsPhoto = new AdsPhoto();

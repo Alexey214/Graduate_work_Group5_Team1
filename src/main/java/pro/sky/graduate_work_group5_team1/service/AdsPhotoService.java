@@ -27,4 +27,6 @@ public interface AdsPhotoService {
     String savePhoto(MultipartFile file);
 
     byte[] getPhoto(Long id);
+
+    void patchPhoto(Integer imageId, MultipartFile file);
 }
