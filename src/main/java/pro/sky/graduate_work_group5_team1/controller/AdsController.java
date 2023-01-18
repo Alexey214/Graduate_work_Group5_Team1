@@ -128,6 +128,9 @@ public class AdsController implements AdsApi {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         FullAds fullAds = adsService.getAds(id);
+        fullAds.setAuthorFirstName("kek");
+        fullAds.setAuthorLastName("lol");
+        fullAds.setPhone("+799999999999999");
         if (fullAds == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
