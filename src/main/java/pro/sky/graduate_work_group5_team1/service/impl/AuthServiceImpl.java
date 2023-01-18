@@ -54,6 +54,9 @@ public class AuthServiceImpl implements AuthService, UtilClassGraduate {
         userTmp.setEmail(registerReq.getUsername());
         userTmp.setPassword(pass);
         userTmp.setRoleEnum(role);
+        userTmp.setFirstName(registerReq.getFirstName());
+        userTmp.setLastName(registerReq.getLastName());
+        userTmp.setPhone(registerReq.getPhone());
         userRepository.save(userTmp);
         return true;
     }
