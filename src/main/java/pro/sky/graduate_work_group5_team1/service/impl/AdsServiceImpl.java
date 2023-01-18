@@ -23,6 +23,7 @@ import pro.sky.graduate_work_group5_team1.service.AdsPhotoService;
 import pro.sky.graduate_work_group5_team1.service.AdsService;
 import pro.sky.graduate_work_group5_team1.util.UtilClassGraduate;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -103,18 +104,27 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     @Override
     public ResponseWrapperAdsComment getAdsComments(Integer adPk) {
         log.info("{}. Получаем все комментарии одного объявления с pk " + adPk, methodName());
-        List<AdsCommentDto> adsCommentList = adsCommentRepository.findAll().stream()
-                .map(adsCommentMapper::toDto)
-                .sorted(Comparator.comparing(AdsCommentDto::getCreatedAt))
-                .toList();
-        ResponseWrapperAdsComment responseWrapperAdsComment = new ResponseWrapperAdsComment();
-        if (!adsCommentList.isEmpty()) {
-            log.info("{}. В списке {} комментариев ", methodName(), adsCommentList.size());
-            responseWrapperAdsComment.setResults(adsCommentList);
-            responseWrapperAdsComment.setCount(adsCommentList.size());
+//        List<AdsCommentDto> adsCommentList = adsCommentRepository.findAll().stream()
+//                .map(adsCommentMapper::toDto)
+//                .sorted(Comparator.comparing(AdsCommentDto::getCreatedAt))
+//                .toList();
+//        ResponseWrapperAdsComment responseWrapperAdsComment = new ResponseWrapperAdsComment();
+        List<AdsComment> adsCommentList = adsCommentRepository.findAll();
+        List<AdsCommentDto> adsCommentDtoList = new ArrayList<AdsCommentDto>(adsCommentList.size());
+        for ( AdsComment adsComment : adsCommentList ) {
+            adsCommentDtoList.add( adsCommentMapper.toDto( adsComment ) );
         }
+//        if (!adsCommentList.isEmpty()) {
+//            log.info("{}. В списке {} комментариев ", methodName(), adsCommentList.size());
+//            responseWrapperAdsComment.setResults(adsCommentList);
+//            responseWrapperAdsComment.setCount(adsCommentList.size());
+//        }
+        ResponseWrapperAdsComment responseWrapperAdsComment = new ResponseWrapperAdsComment();
+        responseWrapperAdsComment.setCount(adsCommentDtoList.size());
+        responseWrapperAdsComment.setResults(adsCommentDtoList);
         return responseWrapperAdsComment;
     }
+
 
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
