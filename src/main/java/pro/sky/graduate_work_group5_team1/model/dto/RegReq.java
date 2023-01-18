@@ -15,4 +15,9 @@ public class RegReq {
     private RoleEnum role;
     private String username;
 
+    private String firstName;
+    private String lastName;
+    private String phone;
+
+
 }
