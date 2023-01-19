@@ -114,7 +114,7 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
 //                .sorted(Comparator.comparing(AdsCommentDto::getCreatedAt))
 //                .toList();
 //        ResponseWrapperAdsComment responseWrapperAdsComment = new ResponseWrapperAdsComment();
-        List<AdsComment> adsCommentList = adsCommentRepository.findAll();
+        List<AdsComment> adsCommentList = adsCommentRepository.findAdsCommentsByPk(adPk);
         List<AdsCommentDto> adsCommentDtoList = new ArrayList<AdsCommentDto>(adsCommentList.size());
         for ( AdsComment adsComment : adsCommentList ) {
             adsCommentDtoList.add( adsCommentMapper.toDto( adsComment ) );

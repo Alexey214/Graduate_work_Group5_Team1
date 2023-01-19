@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ public class AdsController implements AdsApi {
     private final AdsService adsService;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PostMapping("/{adPk}/comments")
     public ResponseEntity<AdsCommentDto> addAdsComments(@PathVariable("adPk") String adPk,
                                                         @RequestBody AdsCommentDto adsCommentDto) {
@@ -38,6 +40,7 @@ public class AdsController implements AdsApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdsDto> addAds(@RequestPart("properties") CreateAds createAds,
                                          @RequestPart("image") MultipartFile file) {
@@ -53,7 +56,8 @@ public class AdsController implements AdsApi {
     }
 
     @Override
-    @DeleteMapping("/{adPk}/comment/{id}")
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
+    @DeleteMapping("/{adPk}/comments/{id}")
     public ResponseEntity<AdsCommentDto> deleteAdsComment(@PathVariable("adPk") String adPk,
                                                           @PathVariable("id") Integer id) {
         if (Integer.parseInt(adPk) < 0 && id < 0) {
@@ -69,23 +73,28 @@ public class AdsController implements AdsApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping
     public ResponseEntity<ResponseWrapperAds> getALLAds() {
         ResponseWrapperAds responseWrapperAds = adsService.getALLAds();
-        if (responseWrapperAds.getCount() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+//        if (responseWrapperAds.getCount() == 0) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
         return ResponseEntity.ok(responseWrapperAds);
     }
 
     @Override
-    @GetMapping("/{adPk}/comment/{id}")
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
+    @GetMapping("/{adPk}/comments/{id}")
     public ResponseEntity<AdsCommentDto> getAdsComment(@PathVariable("adPk") String adPk,
                                                        @PathVariable("id") Integer id) {
         if (Integer.parseInt(adPk) < 0 && id < 0) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        AdsCommentDto adsCommentDto = adsService.getAdsComment(Integer.parseInt(adPk), id);
+        AdsCommentDto adsCommentDto = null;
+        try {
+            adsCommentDto = adsService.getAdsComment(Integer.parseInt(adPk), id);
+        } catch (Exception ignored) {}
         if (adsCommentDto == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -93,6 +102,7 @@ public class AdsController implements AdsApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping("/{adPk}/comments")
     public ResponseEntity<ResponseWrapperAdsComment> getAdsComments(@PathVariable("adPk") String adPk) {
         if (Integer.parseInt(adPk) < 0) {
@@ -115,6 +125,7 @@ public class AdsController implements AdsApi {
     В общем кто будет делать - нужно всё это перепроверить.
      */
     @Override
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping("/me")
     public ResponseEntity<ResponseWrapperAds> getAdsMe() {
         ResponseWrapperAds responseWrapperAds = adsService.getAdsMe();
@@ -122,6 +133,7 @@ public class AdsController implements AdsApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping("/{id}")
     public ResponseEntity<FullAds> getAds(@PathVariable("id") Integer id) {
         if (id < 0) {
@@ -135,6 +147,7 @@ public class AdsController implements AdsApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<AdsDto> removeAds(@PathVariable("id") Integer id) {
         if (id < 0) {
@@ -151,7 +164,8 @@ public class AdsController implements AdsApi {
     }
 
     @Override
-    @PatchMapping("/{adPk}/comment/{id}")
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
+    @PatchMapping("/{adPk}/comments/{id}")
     public ResponseEntity<AdsCommentDto> updateAdsComment(@PathVariable("adPk") String adPk,
                                                           @PathVariable("id") Integer id,
                                                           @RequestBody AdsCommentDto adsCommentDto) {
@@ -168,6 +182,7 @@ public class AdsController implements AdsApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PatchMapping("/{id}")
     public ResponseEntity<AdsDto> updateAds(@PathVariable("id") Integer id, @RequestBody CreateAds createAds) {
         if (id < 0 && createAds == null) {
@@ -182,6 +197,7 @@ public class AdsController implements AdsApi {
         return ResponseEntity.ok(adsDtoTmp);
     }
 
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdsDto> updateAdsImage(@PathVariable("id") Integer id, @RequestPart("image") MultipartFile file) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
