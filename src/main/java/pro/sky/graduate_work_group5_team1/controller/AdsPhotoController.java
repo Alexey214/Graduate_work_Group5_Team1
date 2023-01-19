@@ -21,20 +21,4 @@ public class AdsPhotoController {
     public byte[] getImage(@PathVariable("id") Long id) {
         return adsPhotoServiceImpl.getPhoto(id);
     }
-
-
-    @PostMapping(value = "/{adsId}/adsPhoto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadPhoto(@PathVariable Long adsId, @RequestParam MultipartFile adsPhoto) throws Exception {
-        adsPhotoServiceImpl.uploadPhoto(adsId, adsPhoto);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping(value = "/{id}/photo-from-db")
-    public ResponseEntity<byte[]> downloadPhoto(@PathVariable Long id) {
-        AdsPhoto adsPhoto = adsPhotoServiceImpl.findAdsPhoto(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(adsPhoto.getMediaType()));
-        headers.setContentLength(adsPhoto.getData().length);
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adsPhoto.getData());
-    }
 }
