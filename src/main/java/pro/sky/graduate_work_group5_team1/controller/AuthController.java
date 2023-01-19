@@ -24,16 +24,6 @@ public class AuthController implements AuthApi {
     private final AuthService authService;
 
     @Override
-    @PostMapping("/login")
-    public ResponseEntity<LoginReq> login(@RequestBody LoginReq loginReq) {
-        if (authService.login(loginReq.getUsername(), loginReq.getPassword())) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-    }
-
-    @Override
     @PostMapping("/register")
     public ResponseEntity<RegReq> register(@RequestBody RegReq regReq) {
         RegReq.RoleEnum role = regReq.getRole() == null ? USER : regReq.getRole();
@@ -41,6 +31,16 @@ public class AuthController implements AuthApi {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @Override
+    @PostMapping("/login")
+    public ResponseEntity<LoginReq> login(@RequestBody LoginReq loginReq) {
+        if (authService.login(loginReq.getUsername(), loginReq.getPassword())) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 }

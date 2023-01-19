@@ -24,6 +24,41 @@ public class UserController implements UserApi, UtilSecurity {
     private final UserService userService;
 
     @Override
+    @PostMapping("/setPassword")
+    public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPassword) {
+        try {
+            NewPassword password = userService.setPassword(newPassword, login());
+            return ResponseEntity.ok(password);
+        } catch (UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @Override
+    @GetMapping("/me")
+    public ResponseEntity<ResponseWrapperUser> getUsers() {
+        ResponseWrapperUser responseWrapperUser = userService.getUsers();
+        if (responseWrapperUser.getCount() == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(responseWrapperUser);
+    }
+
+    @Override
+    @PatchMapping("/me")
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        UserDto user = userService.updateUser(userDto);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(user);
+    }
+
+    //Этот запрос вообще приходит?
+    @Override
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") Integer id) {
         if (id < 0) {
@@ -40,39 +75,4 @@ public class UserController implements UserApi, UtilSecurity {
         }
         return ResponseEntity.ok(userDto);
     }
-
-    @Override
-    @GetMapping("/me")
-    public ResponseEntity<ResponseWrapperUser> getUsers() {
-        ResponseWrapperUser responseWrapperUser = userService.getUsers();
-        if (responseWrapperUser.getCount() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(responseWrapperUser);
-    }
-
-    @Override
-    @PostMapping("/setPassword")
-    public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPassword) {
-        try {
-            NewPassword password = userService.setPassword(newPassword, login());
-            return ResponseEntity.ok(password);
-        } catch (UnauthorizedException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-    }
-
-    @Override
-    @PatchMapping("/me")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
-        if (userDto == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        UserDto user = userService.updateUser(userDto);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(user);
-    }
-
 }
