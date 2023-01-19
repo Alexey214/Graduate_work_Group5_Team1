@@ -46,10 +46,10 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public AdsCommentDto addAdsComments(Integer adPk, AdsCommentDto adsCommentDto) {
-        log.debug("{}. Добавляем комментарий {}, принадлежащий объявлению с ключом {}", methodName(), adsCommentDto, adPk);
         adsCommentDto.setAuthor(userRepository.findByEmail(login()).get().getId());
         adsCommentDto.setCreatedAt(LocalDateTime.now());
         adsCommentDto.setPk(adPk);
+        log.debug("{}. Добавляем комментарий {}, принадлежащий объявлению с ключом {}", methodName(), adsCommentDto, adPk);
         AdsComment adsComment = adsCommentMapper.toModel(adsCommentDto);
         adsCommentRepository.save(adsComment);
         return adsCommentMapper.toDto(adsComment);

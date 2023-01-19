@@ -1,7 +1,6 @@
 package pro.sky.graduate_work_group5_team1.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -11,6 +10,8 @@ import pro.sky.graduate_work_group5_team1.model.Ads;
 import pro.sky.graduate_work_group5_team1.model.AdsPhoto;
 import pro.sky.graduate_work_group5_team1.repository.AdsPhotoRepository;
 import pro.sky.graduate_work_group5_team1.repository.AdsRepository;
+import pro.sky.graduate_work_group5_team1.service.AdsPhotoService;
+import pro.sky.graduate_work_group5_team1.util.UtilClassGraduate;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -20,22 +21,22 @@ import java.util.Objects;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
-public class AdsPhotoService implements pro.sky.graduate_work_group5_team1.service.AdsPhotoService {
+@Slf4j
+public class AdsPhotoServiceImpl implements AdsPhotoService, UtilClassGraduate {
 
     private final AdsPhotoRepository adsPhotoRepository;
     private final AdsRepository adsRepository;
 
-    public AdsPhotoService(AdsPhotoRepository adsPhotoRepository, AdsRepository adsRepository) {
+    public AdsPhotoServiceImpl(AdsPhotoRepository adsPhotoRepository, AdsRepository adsRepository) {
         this.adsPhotoRepository = adsPhotoRepository;
         this.adsRepository = adsRepository;
     }
 
     @Value("&{path.to.photo.folder}")
     private String photoDir;
-    private final Logger logger = LoggerFactory.getLogger(AdsPhotoService.class);
 
     public void uploadPhoto(Long adsId, MultipartFile adsPhotoFile) throws IOException {
-        logger.debug("method uploadPhoto is started");
+        log.debug("method {} is started", methodName());
         Ads ads = adsRepository.getReferenceById(adsId.intValue());
         Path filePath = Path.of(photoDir, ads + "." + getExtensions(Objects.requireNonNull(adsPhotoFile.getOriginalFilename())));
         Files.createDirectories(filePath.getParent());
@@ -57,6 +58,7 @@ public class AdsPhotoService implements pro.sky.graduate_work_group5_team1.servi
     }
 
     public String savePhoto(MultipartFile file) {
+        log.debug("method {} is started", methodName());
         AdsPhoto adsPhoto = new AdsPhoto();
         adsPhoto.setFileSize(file.getSize());
         adsPhoto.setMediaType(file.getContentType());
@@ -75,12 +77,14 @@ public class AdsPhotoService implements pro.sky.graduate_work_group5_team1.servi
     @Transactional
     @Override
     public byte[] getPhoto(Long id) {
+        log.debug("method {} is started. getPhoto {}", methodName(), id);
         AdsPhoto photo = adsPhotoRepository.getReferenceById(id);
         return photo.getData();
     }
 
     @Override
     public void patchPhoto(Integer imageId, MultipartFile file) {
+        log.debug("method {} is started. patchPhoto {}", methodName(), imageId);
         AdsPhoto adsPhotoToPatch = adsPhotoRepository.findById(imageId.longValue()).get();
         try {
             adsPhotoToPatch.setData(file.getBytes());
@@ -93,12 +97,13 @@ public class AdsPhotoService implements pro.sky.graduate_work_group5_team1.servi
     }
 
     private String getExtensions(String fileName) {
+        log.debug("method {} is started. Get fileName {}", methodName(), fileName);
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     public AdsPhoto findAdsPhoto(long adsId) {
-        logger.debug("method findAdsPhoto is started");
+        log.debug("method {} is started from adsId {}", methodName(), adsId);
         AdsPhoto adsPhoto = new AdsPhoto();
         adsPhoto = adsPhotoRepository.findAdsPhotoByAds_Pk((int) adsId);
         return adsPhoto;
