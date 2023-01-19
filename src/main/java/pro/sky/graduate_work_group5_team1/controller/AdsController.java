@@ -59,7 +59,9 @@ public class AdsController implements AdsApi {
         if (Integer.parseInt(adPk) < 0 && id < 0) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        AdsCommentDto adsCommentDto = adsService.deleteAdsComment(Integer.parseInt(adPk), id);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        AdsCommentDto adsCommentDto = adsService.deleteAdsComment(Integer.parseInt(adPk), id, user);
         if (adsCommentDto == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -138,10 +140,13 @@ public class AdsController implements AdsApi {
         if (id < 0) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        AdsDto adsDto = adsService.removeAds(id);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        AdsDto adsDto = adsService.removeAds(id, user);
         if (adsDto == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+
         return ResponseEntity.ok(adsDto);
     }
 
@@ -153,7 +158,9 @@ public class AdsController implements AdsApi {
         if (Integer.parseInt(adPk) < 0 && id < 0 && adsCommentDto == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        AdsCommentDto adsCommentDtoTmp = adsService.updateAdsComment(Integer.parseInt(adPk), id, adsCommentDto);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        AdsCommentDto adsCommentDtoTmp = adsService.updateAdsComment(Integer.parseInt(adPk), id, adsCommentDto, user);
         if (adsCommentDtoTmp == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -166,16 +173,22 @@ public class AdsController implements AdsApi {
         if (id < 0 && createAds == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        AdsDto adsDtoTmp = adsService.updateAds(id, createAds);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        AdsDto adsDtoTmp = adsService.updateAds(id, createAds, user);
         if (adsDtoTmp == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(adsDtoTmp);
     }
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdsDto> updateAdsImage(@PathVariable("id") Integer id, @RequestPart("image") MultipartFile file) {
-        adsService.patchAdsImage(id, file);
-        return ResponseEntity.ok(null);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        if (adsService.patchAdsImage(id, file, user) == 1) {
+            return ResponseEntity.ok(null);
+        } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
     }
 }

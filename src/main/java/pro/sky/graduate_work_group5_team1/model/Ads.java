@@ -31,7 +31,7 @@ public class Ads {
     @JoinColumn(name = "user_id")
     private User author;
 
-    @OneToMany(mappedBy = "pk", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pk", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<AdsComment> adsComment;
 
