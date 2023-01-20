@@ -171,6 +171,7 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
         log.info("{}. Удаляем объявление с id {}:", methodName(), id);
         Ads ads = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
         if (Objects.equals(ads.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
+            adsPhotoService.deleteImage(ads.getImage());
             adsRepository.deleteById(id);
             log.warn("{}. Объявление с id {} удалено", methodName(), id);
         }

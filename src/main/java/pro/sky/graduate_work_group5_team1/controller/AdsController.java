@@ -26,17 +26,13 @@ public class AdsController implements AdsApi {
 
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
-    @PostMapping("/{adPk}/comments")
-    public ResponseEntity<AdsCommentDto> addAdsComments(@PathVariable("adPk") String adPk,
-                                                        @RequestBody AdsCommentDto adsCommentDto) {
-        if (Integer.parseInt(adPk) < 0 || adsCommentDto == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        AdsCommentDto adsCommentDtoTmp = adsService.addAdsComments(Integer.parseInt(adPk), adsCommentDto);
-        if (adsCommentDtoTmp == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        return ResponseEntity.ok(adsCommentDtoTmp);
+    @GetMapping
+    public ResponseEntity<ResponseWrapperAds> getALLAds() {
+        ResponseWrapperAds responseWrapperAds = adsService.getALLAds();
+//        if (responseWrapperAds.getCount() == 0) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+        return ResponseEntity.ok(responseWrapperAds);
     }
 
     @Override
@@ -57,52 +53,6 @@ public class AdsController implements AdsApi {
 
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
-    @DeleteMapping("/{adPk}/comments/{id}")
-    public ResponseEntity<AdsCommentDto> deleteAdsComment(@PathVariable("adPk") String adPk,
-                                                          @PathVariable("id") Integer id) {
-        if (Integer.parseInt(adPk) < 0 && id < 0) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) auth.getPrincipal();
-        AdsCommentDto adsCommentDto = adsService.deleteAdsComment(Integer.parseInt(adPk), id, user);
-        if (adsCommentDto == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        return ResponseEntity.ok(adsCommentDto);
-    }
-
-    @Override
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
-    @GetMapping
-    public ResponseEntity<ResponseWrapperAds> getALLAds() {
-        ResponseWrapperAds responseWrapperAds = adsService.getALLAds();
-//        if (responseWrapperAds.getCount() == 0) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-        return ResponseEntity.ok(responseWrapperAds);
-    }
-
-    @Override
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
-    @GetMapping("/{adPk}/comments/{id}")
-    public ResponseEntity<AdsCommentDto> getAdsComment(@PathVariable("adPk") String adPk,
-                                                       @PathVariable("id") Integer id) {
-        if (Integer.parseInt(adPk) < 0 && id < 0) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        AdsCommentDto adsCommentDto = null;
-        try {
-            adsCommentDto = adsService.getAdsComment(Integer.parseInt(adPk), id);
-        } catch (Exception ignored) {}
-        if (adsCommentDto == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(adsCommentDto);
-    }
-
-    @Override
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping("/{adPk}/comments")
     public ResponseEntity<ResponseWrapperAdsComment> getAdsComments(@PathVariable("adPk") String adPk) {
         if (Integer.parseInt(adPk) < 0) {
@@ -119,17 +69,19 @@ public class AdsController implements AdsApi {
         return ResponseEntity.ok(responseWrapperAdsComment);
     }
 
-    /*
-    Тут прям муть какая-то. В yaml файле указаны какие-то query запросы.
-    Типы объектов тут тоже в половине случаев - object.
-    В общем кто будет делать - нужно всё это перепроверить.
-     */
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
-    @GetMapping("/me")
-    public ResponseEntity<ResponseWrapperAds> getAdsMe() {
-        ResponseWrapperAds responseWrapperAds = adsService.getAdsMe();
-        return ResponseEntity.ok(responseWrapperAds);
+    @PostMapping("/{adPk}/comments")
+    public ResponseEntity<AdsCommentDto> addAdsComments(@PathVariable("adPk") String adPk,
+                                                        @RequestBody AdsCommentDto adsCommentDto) {
+        if (Integer.parseInt(adPk) < 0 || adsCommentDto == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        AdsCommentDto adsCommentDtoTmp = adsService.addAdsComments(Integer.parseInt(adPk), adsCommentDto);
+        if (adsCommentDtoTmp == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(adsCommentDtoTmp);
     }
 
     @Override
@@ -165,6 +117,57 @@ public class AdsController implements AdsApi {
 
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
+    @PatchMapping("/{id}")
+    public ResponseEntity<AdsDto> updateAds(@PathVariable("id") Integer id, @RequestBody CreateAds createAds) {
+        if (id < 0 && createAds == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        AdsDto adsDtoTmp = adsService.updateAds(id, createAds, user);
+        if (adsDtoTmp == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(adsDtoTmp);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
+    @GetMapping("/{adPk}/comments/{id}")
+    public ResponseEntity<AdsCommentDto> getAdsComment(@PathVariable("adPk") String adPk,
+                                                       @PathVariable("id") Integer id) {
+        if (Integer.parseInt(adPk) < 0 && id < 0) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        AdsCommentDto adsCommentDto = null;
+        try {
+            adsCommentDto = adsService.getAdsComment(Integer.parseInt(adPk), id);
+        } catch (Exception ignored) {}
+        if (adsCommentDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(adsCommentDto);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
+    @DeleteMapping("/{adPk}/comments/{id}")
+    public ResponseEntity<AdsCommentDto> deleteAdsComment(@PathVariable("adPk") String adPk,
+                                                          @PathVariable("id") Integer id) {
+        if (Integer.parseInt(adPk) < 0 && id < 0) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        AdsCommentDto adsCommentDto = adsService.deleteAdsComment(Integer.parseInt(adPk), id, user);
+        if (adsCommentDto == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(adsCommentDto);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PatchMapping("/{adPk}/comments/{id}")
     public ResponseEntity<AdsCommentDto> updateAdsComment(@PathVariable("adPk") String adPk,
                                                           @PathVariable("id") Integer id,
@@ -181,22 +184,19 @@ public class AdsController implements AdsApi {
         return ResponseEntity.ok(adsCommentDto);
     }
 
+    /*
+    Тут прям муть какая-то. В yaml файле указаны какие-то query запросы.
+    Типы объектов тут тоже в половине случаев - object.
+    В общем кто будет делать - нужно всё это перепроверить.
+     */
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
-    @PatchMapping("/{id}")
-    public ResponseEntity<AdsDto> updateAds(@PathVariable("id") Integer id, @RequestBody CreateAds createAds) {
-        if (id < 0 && createAds == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) auth.getPrincipal();
-        AdsDto adsDtoTmp = adsService.updateAds(id, createAds, user);
-        if (adsDtoTmp == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        return ResponseEntity.ok(adsDtoTmp);
+    @GetMapping("/me")
+    public ResponseEntity<ResponseWrapperAds> getAdsMe() {
+        ResponseWrapperAds responseWrapperAds = adsService.getAdsMe();
+        return ResponseEntity.ok(responseWrapperAds);
     }
-
+    
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdsDto> updateAdsImage(@PathVariable("id") Integer id, @RequestPart("image") MultipartFile file) {

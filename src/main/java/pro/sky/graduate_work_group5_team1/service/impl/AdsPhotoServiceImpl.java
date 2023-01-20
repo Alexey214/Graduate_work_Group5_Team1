@@ -108,4 +108,11 @@ public class AdsPhotoServiceImpl implements AdsPhotoService, UtilClassGraduate {
         adsPhoto = adsPhotoRepository.findAdsPhotoByAds_Pk((int) adsId);
         return adsPhoto;
     }
+
+    @Override
+    public void deleteImage(String photoPath) {
+        String[] photoPathArray = photoPath.split("/");
+        Long photoId = Long.parseLong(photoPathArray[photoPathArray.length - 1]);
+        adsPhotoRepository.deleteById(photoId);
+    }
 }

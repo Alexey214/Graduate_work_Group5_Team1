@@ -36,8 +36,7 @@ public class WebSecurityConfig {
             "/ads", "/ads/*",
             "/ads/*/comments", "/ads/*/comments/*",
             "/users", "/users/*", "/users/me",
-            "/images/*", "/ads/*/image",
-            "/*/adsPhoto", "/*/photo-from-db"
+            "/images/*", "/ads/*/image"
     };
 
 //    @Bean

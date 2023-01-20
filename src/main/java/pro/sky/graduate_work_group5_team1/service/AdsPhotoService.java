@@ -29,4 +29,6 @@ public interface AdsPhotoService {
     byte[] getPhoto(Long id);
 
     void patchPhoto(Integer imageId, MultipartFile file);
+
+    void deleteImage(String photoPath);
 }
