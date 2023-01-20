@@ -1,5 +1,6 @@
 package pro.sky.graduate_work_group5_team1.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,16 +22,12 @@ import java.util.Objects;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class AdsPhotoServiceImpl implements AdsPhotoService, UtilClassGraduate {
 
     private final AdsPhotoRepository adsPhotoRepository;
     private final AdsRepository adsRepository;
-
-    public AdsPhotoServiceImpl(AdsPhotoRepository adsPhotoRepository, AdsRepository adsRepository) {
-        this.adsPhotoRepository = adsPhotoRepository;
-        this.adsRepository = adsRepository;
-    }
 
     @Value("&{path.to.photo.folder}")
     private String photoDir;
@@ -73,7 +70,6 @@ public class AdsPhotoServiceImpl implements AdsPhotoService, UtilClassGraduate {
         return "/images/" + photoId;
     }
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Transactional
     @Override
     public byte[] getPhoto(Long id) {
@@ -101,7 +97,6 @@ public class AdsPhotoServiceImpl implements AdsPhotoService, UtilClassGraduate {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     public AdsPhoto findAdsPhoto(long adsId) {
         log.debug("method {} is started from adsId {}", methodName(), adsId);
         AdsPhoto adsPhoto = new AdsPhoto();
