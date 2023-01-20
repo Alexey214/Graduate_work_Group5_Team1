@@ -36,18 +36,8 @@ public class WebSecurityConfig {
             "/ads", "/ads/*",
             "/ads/*/comments", "/ads/*/comments/*",
             "/users", "/users/*", "/users/me",
-            "/images/*", "/ads/*/image"
+            "/images/*", "/ads/*/image", "/users/me/image",
     };
-
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsService() {
-//        UserDetails user = User.withDefaultPasswordEncoder()
-//                .username("user@gmail.com")
-//                .password("password")
-//                .roles("USER")
-//                .build();
-//        return new InMemoryUserDetailsManager(user);
-//    }
 
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
@@ -71,14 +61,6 @@ public class WebSecurityConfig {
                 .cors()
                 .and()
                 .httpBasic(withDefaults())
-//                .authorizeRequests()
-//                .antMatchers("/users/**", "/users/me").access("hasRole('USER')")
-////                .antMatchers("/login", "/register").permitAll()
-//                .and()
-//                .formLogin()
-//                .loginPage("/login")
-////                .defaultSuccessUrl("/profile")
-//                .and()
                 .build();
     }
 

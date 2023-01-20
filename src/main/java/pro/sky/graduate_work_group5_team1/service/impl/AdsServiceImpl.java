@@ -15,8 +15,8 @@ import pro.sky.graduate_work_group5_team1.model.Ads;
 import pro.sky.graduate_work_group5_team1.model.AdsComment;
 import pro.sky.graduate_work_group5_team1.model.User;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
-import pro.sky.graduate_work_group5_team1.repository.AdsRepository;
 import pro.sky.graduate_work_group5_team1.repository.AdsCommentRepository;
+import pro.sky.graduate_work_group5_team1.repository.AdsRepository;
 import pro.sky.graduate_work_group5_team1.repository.UserRepository;
 import pro.sky.graduate_work_group5_team1.security.UtilSecurity;
 import pro.sky.graduate_work_group5_team1.service.AdsPhotoService;
@@ -40,13 +40,11 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     private final AdsRepository adsRepository;
     private final AdsCommentRepository adsCommentRepository;
     private final UserRepository userRepository;
-
     private final AdsPhotoService adsPhotoService;
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public AdsCommentDto addAdsComments(Integer adPk, AdsCommentDto adsCommentDto) {
-        adsCommentDto.setAuthor(userRepository.findByEmail(login()).get().getId());
+        adsCommentDto.setAuthor(userRepository.findByEmail(login()).orElseThrow(UserNotFoundException::new).getId());
         adsCommentDto.setCreatedAt(LocalDateTime.now());
         adsCommentDto.setPk(adPk);
         log.debug("{}. Добавляем комментарий {}, принадлежащий объявлению с ключом {}", methodName(), adsCommentDto, adPk);
@@ -55,7 +53,6 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
         return adsCommentMapper.toDto(adsComment);
     }
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public AdsDto addAds(CreateAds createAds, MultipartFile file, User user) {
         log.debug("{}. Добавляем объявление с title {}:", methodName(), createAds.getTitle());
@@ -72,7 +69,6 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
         return adsMapper.toDto(adsToCommit);
     }
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public AdsCommentDto deleteAdsComment(Integer adPk, Integer id, User user) {
         log.info("{}. Удаляем комментарий с id {}, относящийся к объявлению с ключом {}", methodName(), id, adPk);
@@ -96,7 +92,6 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
         return responseWrapperAds;
     }
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public AdsCommentDto getAdsComment(Integer adPk, Integer id) {
         log.info("{}. Получаем комментарий с id {}, относящийся к объявлению с ключом {}", methodName(), id, adPk);
@@ -105,25 +100,14 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
         return adsCommentMapper.toDto(adsComment);
     }
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public ResponseWrapperAdsComment getAdsComments(Integer adPk) {
         log.info("{}. Получаем все комментарии одного объявления с pk " + adPk, methodName());
-//        List<AdsCommentDto> adsCommentList = adsCommentRepository.findAll().stream()
-//                .map(adsCommentMapper::toDto)
-//                .sorted(Comparator.comparing(AdsCommentDto::getCreatedAt))
-//                .toList();
-//        ResponseWrapperAdsComment responseWrapperAdsComment = new ResponseWrapperAdsComment();
         List<AdsComment> adsCommentList = adsCommentRepository.findAdsCommentsByPk(adPk);
         List<AdsCommentDto> adsCommentDtoList = new ArrayList<AdsCommentDto>(adsCommentList.size());
-        for ( AdsComment adsComment : adsCommentList ) {
-            adsCommentDtoList.add( adsCommentMapper.toDto( adsComment ) );
+        for (AdsComment adsComment : adsCommentList) {
+            adsCommentDtoList.add(adsCommentMapper.toDto(adsComment));
         }
-//        if (!adsCommentList.isEmpty()) {
-//            log.info("{}. В списке {} комментариев ", methodName(), adsCommentList.size());
-//            responseWrapperAdsComment.setResults(adsCommentList);
-//            responseWrapperAdsComment.setCount(adsCommentList.size());
-//        }
         ResponseWrapperAdsComment responseWrapperAdsComment = new ResponseWrapperAdsComment();
         responseWrapperAdsComment.setCount(adsCommentDtoList.size());
         responseWrapperAdsComment.setResults(adsCommentDtoList);
@@ -131,7 +115,6 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     }
 
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public ResponseWrapperAds getAdsMe() {
         String login = login();
@@ -146,7 +129,6 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
 
     }
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public FullAds getAds(Integer id) {
         Ads ads = adsRepository.findById(id).orElseThrow(AdsCommentNotFoundException::new);
@@ -165,7 +147,6 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
         return fullAds;
     }
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public AdsDto removeAds(Integer id, User user) {
         log.info("{}. Удаляем объявление с id {}:", methodName(), id);
@@ -178,28 +159,26 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
         return adsMapper.toDto(ads);
     }
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public AdsCommentDto updateAdsComment(Integer adPk, Integer id, AdsCommentDto adsCommentDto, User user) {
         AdsComment adsComment = adsCommentRepository.findAdsCommentByPkAndId(adPk, id)
                 .orElseThrow(AdsCommentNotFoundException::new);
         if (Objects.equals(adsComment.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
-            log.debug("{}. Изменяем комментарий {}, принадлежащее пользователю с id {} и относящийся к объявлению с ключом {}",
+            log.debug("{}. Изменяем комментарий {}, с id {} и относящийся к объявлению с ключом {}",
                     methodName(), adsComment, id, adPk);
-            adsComment.setAuthor(userRepository.findById(id).orElseThrow(UserNotFoundException::new));
+            adsComment.setAuthor(userRepository.findById(user.getId()).orElseThrow(UserNotFoundException::new));
             adsComment.setPk(adsRepository.findById(adPk).orElseThrow(AdsNotFoundException::new));
-            adsComment.setText(adsComment.getText());
-            adsComment.setCreatedAt(adsCommentDto.getCreatedAt());
+            adsComment.setText(adsCommentDto.getText());
+            adsComment.setCreatedAt(LocalDateTime.now());
             adsCommentRepository.save(adsComment);
         }
         return adsCommentDto;
     }
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public AdsDto updateAds(Integer id, CreateAds createAds, User user) {
         log.debug("{}. Изменяем объявление {}", methodName(), id);
-        Ads adsToPatch = adsRepository.findById(id).get();
+        Ads adsToPatch = adsRepository.findById(id).orElseThrow(AdsCommentNotFoundException::new);
         if (Objects.equals(adsToPatch.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
             adsToPatch.setDescription(createAds.getDescription());
             adsToPatch.setTitle(createAds.getTitle());
@@ -209,14 +188,13 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
             adsRepository.save(adsToPatch);
             return adsDto;
         }
-        return null;
+        throw new AdsCommentNotFoundException();
     }
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public Integer patchAdsImage(Integer id, MultipartFile file, User user) {
         log.debug("{}. Изменяем картинку в объявлении {}", methodName(), id);
-        Ads adsToPatch = adsRepository.findById(id).get();
+        Ads adsToPatch = adsRepository.findById(id).orElseThrow(AdsCommentNotFoundException::new);
         if (Objects.equals(adsToPatch.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
             String[] imagePath = adsToPatch.getImage().split("/");
             Integer imageId = Integer.parseInt(imagePath[imagePath.length - 1]);

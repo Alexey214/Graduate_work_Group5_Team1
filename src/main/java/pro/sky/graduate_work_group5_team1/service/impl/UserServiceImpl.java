@@ -2,7 +2,6 @@ package pro.sky.graduate_work_group5_team1.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pro.sky.graduate_work_group5_team1.exeption.ForbiddenException;
@@ -28,7 +27,6 @@ public class UserServiceImpl implements UserService, UtilSecurity, UtilClassGrad
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public UserDto getUser(Integer id) {
         log.info("{}. Получаем пользователя с id {}:", methodName(), id);
@@ -37,7 +35,6 @@ public class UserServiceImpl implements UserService, UtilSecurity, UtilClassGrad
                 .orElseThrow(UserNotFoundException::new);
     }
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public UserDto getUser(String email) {
         log.info("{}. Получаем пользователя с email {}:", methodName(), email);
@@ -63,7 +60,6 @@ public class UserServiceImpl implements UserService, UtilSecurity, UtilClassGrad
         return responseWrapperUser;
     }
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public NewPassword setPassword(NewPassword newPassword, String email) {
         log.info("{}. Сохраняем пароль пользователя с email {}:", methodName(), email);
@@ -78,7 +74,6 @@ public class UserServiceImpl implements UserService, UtilSecurity, UtilClassGrad
         return newPassword;
     }
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @Override
     public UserDto updateUser(UserDto userDto) {
         log.info("{}. Изменяем пользователя " + userDto, methodName());

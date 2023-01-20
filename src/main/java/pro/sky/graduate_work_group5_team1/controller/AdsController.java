@@ -25,7 +25,6 @@ public class AdsController implements AdsApi {
     private final AdsService adsService;
 
     @Override
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping
     public ResponseEntity<ResponseWrapperAds> getALLAds() {
         ResponseWrapperAds responseWrapperAds = adsService.getALLAds();
@@ -184,11 +183,6 @@ public class AdsController implements AdsApi {
         return ResponseEntity.ok(adsCommentDto);
     }
 
-    /*
-    Тут прям муть какая-то. В yaml файле указаны какие-то query запросы.
-    Типы объектов тут тоже в половине случаев - object.
-    В общем кто будет делать - нужно всё это перепроверить.
-     */
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping("/me")
@@ -205,6 +199,5 @@ public class AdsController implements AdsApi {
         if (adsService.patchAdsImage(id, file, user) == 1) {
             return ResponseEntity.ok(null);
         } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-
     }
 }
