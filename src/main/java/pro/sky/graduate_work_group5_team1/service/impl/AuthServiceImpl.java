@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService, UtilClassGraduate {
         try {
             UserDetails userDetails = manager.loadUserByUsername(userName);
             String encryptedPassword = userDetails.getPassword();
-            String databaseUserPassword = userRepository.findByEmail(userName).get().getPassword();
+            String databaseUserPassword = userRepository.findByEmail(userName).orElseThrow(UserNotFoundException::new).getPassword();
             return encryptedPassword.equals(databaseUserPassword);
         } catch (UsernameNotFoundException | NoSuchElementException e) {
             log.warn("{}. Неверное имя пользователя userName: {}", methodName(), userName);
