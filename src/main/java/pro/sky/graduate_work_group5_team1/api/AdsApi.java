@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-//import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +13,7 @@ import pro.sky.graduate_work_group5_team1.exeption.ForbiddenException;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 @Validated
 public interface AdsApi {
@@ -29,7 +29,7 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<AdsCommentDto> addAdsComments(@Parameter(description = "adPk", required = true, schema = @Schema()) String adPk,
+    ResponseEntity<AdsCommentDto> addAdsComments(@Parameter(description = "adPk", required = true, schema = @Schema()) @Min(1) Integer adPk,
                                                  @Parameter(description = "comment", required = true, schema = @Schema()) @Valid AdsCommentDto adsCommentDto);
 
     @Operation(
@@ -51,8 +51,8 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "204", description = "No Content"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden")})
-    ResponseEntity<AdsCommentDto> deleteAdsComment(@Parameter(description = "adPk", required = true, schema = @Schema()) String adPk,
-                                                   @Parameter(description = "id", required = true, schema = @Schema()) Integer id);
+    ResponseEntity<AdsCommentDto> deleteAdsComment(@Parameter(description = "adPk", required = true, schema = @Schema()) @Min(1) Integer adPk,
+                                                   @Parameter(description = "id", required = true, schema = @Schema()) @Min(1) Integer id);
 
     @Operation(
             summary = "getALLAds",
@@ -76,8 +76,8 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<AdsCommentDto> getAdsComment(@Parameter(description = "adPk", required = true, schema = @Schema()) String adPk,
-                                                @Parameter(description = "id", required = true, schema = @Schema()) Integer id);
+    ResponseEntity<AdsCommentDto> getAdsComment(@Parameter(description = "adPk", required = true, schema = @Schema()) @Min(1) Integer adPk,
+                                                @Parameter(description = "id", required = true, schema = @Schema()) @Min(1) Integer id);
 
     @Operation(
             summary = "getAdsComments",
@@ -89,7 +89,7 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<ResponseWrapperAdsComment> getAdsComments(@Parameter(description = "adPk", required = true, schema = @Schema()) String adPk);
+    ResponseEntity<ResponseWrapperAdsComment> getAdsComments(@Parameter(description = "adPk", required = true, schema = @Schema()) Integer adPk);
 
     @Operation(
             summary = "getAdsMe",
@@ -113,7 +113,7 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<FullAds> getAds(@Parameter(description = "id", required = true, schema = @Schema()) Integer id);
+    ResponseEntity<FullAds> getAds(@Parameter(description = "id", required = true, schema = @Schema()) @Min(1) Integer id);
 
     @Operation(
             summary = "removeAds",
@@ -122,7 +122,7 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "204", description = "No Content"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden")})
-    ResponseEntity<AdsDto> removeAds(@Parameter(description = "id", required = true, schema = @Schema()) Integer id);
+    ResponseEntity<AdsDto> removeAds(@Parameter(description = "id", required = true, schema = @Schema()) @Min(1) Integer id);
 
     @Operation(
             summary = "updateAdsComment",
@@ -134,8 +134,8 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "204", description = "No Content"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden")})
-    ResponseEntity<AdsCommentDto> updateAdsComment(@Parameter(description = "adPk", required = true, schema = @Schema()) String adPk,
-                                                   @Parameter(description = "id", required = true, schema = @Schema()) Integer id,
+    ResponseEntity<AdsCommentDto> updateAdsComment(@Parameter(description = "adPk", required = true, schema = @Schema()) @Min(1) Integer adPk,
+                                                   @Parameter(description = "id", required = true, schema = @Schema()) @Min(1) Integer id,
                                                    @Parameter(description = "comment", required = true, schema = @Schema()) @Valid AdsCommentDto adsCommentDto);
 
     @Operation(
@@ -148,7 +148,18 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "204", description = "No Content"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden")})
-    ResponseEntity<AdsDto> updateAds(@Parameter(description = "id", required = true, schema = @Schema()) Integer id,
+    ResponseEntity<AdsDto> updateAds(@Parameter(description = "id", required = true, schema = @Schema()) @Min(1) Integer id,
                                      @Parameter(description = "ads", required = true, schema = @Schema()) @Valid CreateAds createAds);
 
+    @Operation(
+            summary = "addAds",
+            description = "Добавить объявления",
+            tags = "Объявления",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = AdsDto.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized")})
+    ResponseEntity<AdsDto> updateAdsImage(@Parameter(description = "id", required = true, schema = @Schema()) @Min(1) Integer id,
+                                          @Parameter(description = "image", required = true, schema = @Schema()) MultipartFile file);
 }

@@ -14,6 +14,7 @@ import pro.sky.graduate_work_group5_team1.model.dto.ResponseWrapperUser;
 import pro.sky.graduate_work_group5_team1.model.dto.UserDto;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 @Validated
 public interface UserApi {
@@ -28,7 +29,7 @@ public interface UserApi {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")})
-    ResponseEntity<UserDto> getUser(@Parameter(description = "id", required = true, schema = @Schema()) Integer id);
+    ResponseEntity<UserDto> getUser(@Parameter(description = "id", required = true, schema = @Schema()) @Min(1) Integer id);
 
     @Operation(
             summary = "getUsers",
