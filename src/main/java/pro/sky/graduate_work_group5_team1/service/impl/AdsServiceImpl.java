@@ -2,13 +2,12 @@ package pro.sky.graduate_work_group5_team1.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import pro.sky.graduate_work_group5_team1.exeption.AdsCommentNotFoundException;
-import pro.sky.graduate_work_group5_team1.exeption.AdsNotFoundException;
-import pro.sky.graduate_work_group5_team1.exeption.ForbiddenException;
-import pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException;
+import pro.sky.graduate_work_group5_team1.exception.AdsCommentNotFoundException;
+import pro.sky.graduate_work_group5_team1.exception.AdsNotFoundException;
+import pro.sky.graduate_work_group5_team1.exception.ForbiddenException;
+import pro.sky.graduate_work_group5_team1.exception.UserNotFoundException;
 import pro.sky.graduate_work_group5_team1.mapper.AdsCommentMapper;
 import pro.sky.graduate_work_group5_team1.mapper.AdsListMapper;
 import pro.sky.graduate_work_group5_team1.mapper.AdsMapper;

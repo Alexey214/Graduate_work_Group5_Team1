@@ -1,9 +1,7 @@
 package pro.sky.graduate_work_group5_team1.service;
 
 import org.springframework.web.multipart.MultipartFile;
-import pro.sky.graduate_work_group5_team1.model.Ads;
 import pro.sky.graduate_work_group5_team1.model.AdsComment;
-import pro.sky.graduate_work_group5_team1.model.User;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
 
 public interface AdsService {
@@ -30,7 +28,7 @@ public interface AdsService {
      *
      * @param adPk ключ объявления, в котором написан комментарий
      * @param id   идентификатор комментария
-     * @return
+     * @return удалённый {@link AdsCommentDto}
      */
     AdsCommentDto deleteAdsComment(Integer adPk, Integer id);
 
@@ -59,7 +57,7 @@ public interface AdsService {
     ResponseWrapperAdsComment getAdsComments(Integer adPk);
 
     /**
-     * Метод загадка
+     * Метод для получения созданных текущим пользователем объявлений
      */
     ResponseWrapperAds getAdsMe();
 
@@ -75,7 +73,7 @@ public interface AdsService {
      * Метод для удаления объявления
      *
      * @param id идентификатор объявления
-     * @return
+     * @return возвращает удалённый {@link AdsDto} в случае успеха, либо {@link pro.sky.graduate_work_group5_team1.exception.ForbiddenException}
      */
     AdsDto removeAds(Integer id);
 
@@ -98,5 +96,12 @@ public interface AdsService {
      */
     AdsDto updateAds(Integer id, CreateAds createAds);
 
+    /**
+     * Метод изменения изображения объявления
+     *
+     * @param id   идентификатор объявления
+     * @param file новые графические данные
+     * @return возвращает "1" в случае успеха, "0" в случае неудачной операции
+     */
     Integer patchAdsImage(Integer id, MultipartFile file);
 }

@@ -1,6 +1,6 @@
 package pro.sky.graduate_work_group5_team1.service;
 
-import pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException;
+import pro.sky.graduate_work_group5_team1.exception.UserNotFoundException;
 import pro.sky.graduate_work_group5_team1.model.dto.NewPassword;
 import pro.sky.graduate_work_group5_team1.model.dto.ResponseWrapperUser;
 import pro.sky.graduate_work_group5_team1.model.dto.UserDto;

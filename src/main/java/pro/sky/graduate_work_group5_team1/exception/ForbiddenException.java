@@ -1,4 +1,4 @@
-package pro.sky.graduate_work_group5_team1.exeption;
+package pro.sky.graduate_work_group5_team1.exception;
 
 public class ForbiddenException extends RuntimeException {
 

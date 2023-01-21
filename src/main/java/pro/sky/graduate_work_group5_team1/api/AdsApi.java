@@ -9,8 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
-import pro.sky.graduate_work_group5_team1.exeption.AdsCommentNotFoundException;
-import pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException;
+import pro.sky.graduate_work_group5_team1.exception.AdsCommentNotFoundException;
+import pro.sky.graduate_work_group5_team1.exception.UserNotFoundException;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
 
 import javax.validation.Valid;
@@ -18,12 +18,13 @@ import javax.validation.constraints.Min;
 
 @Validated
 public interface AdsApi {
+
     /**
-     * Метод для добавления комментария к объявлению. В метод передается айди объявления и сущность комментария.
+     * Метод для добавления комментария к объявлению. В метод передается идентификатор объявления и сущность комментария.
      *
-     * @param adPk
-     * @param adsCommentDto
-     * @return AdsCommentDto
+     * @param adPk          ключ объявления
+     * @param adsCommentDto комментарий пользователя
+     * @return возвращает добавленное объявление {@link AdsCommentDto}
      * @throws org.springframework.web.client.HttpClientErrorException.NotFound если автор объявления не найден
      */
     @Operation(
@@ -43,9 +44,9 @@ public interface AdsApi {
     /**
      * Метод для добавления объявления. Принимает текстовые данные и мультипарт файл фотографии.
      *
-     * @param createAds
-     * @param multipartFile
-     * @return AdsDto
+     * @param createAds     объявление пользователя
+     * @param multipartFile изображение объявления
+     * @return возвращает добавленное объявление {@link AdsDto}
      */
     @Operation(
             summary = "addAds",
@@ -62,9 +63,9 @@ public interface AdsApi {
     /**
      * Метод для удаления комментария
      *
-     * @param adPk
-     * @param id
-     * @return AdsCommentDto
+     * @param adPk ключ объявления
+     * @param id   идентификатор комментария
+     * @return возвращает удалённый комментарий {@link AdsCommentDto}
      * @throws AdsCommentNotFoundException если комментарий не найден
      */
     @Operation(
@@ -80,7 +81,7 @@ public interface AdsApi {
     /**
      * Метод для получения всех объявлений. Возвращает ResponseWrapperAds. В полях которого Коллекция объявленийц и счетчик их кол-ва.
      *
-     * @return ResponseWrapperAds
+     * @return возвращает все объявления {@link ResponseWrapperAds}
      */
     @Operation(
 
@@ -101,7 +102,7 @@ public interface AdsApi {
      *
      * @param adPk ключ объявления, к которому принадлежит комментарий
      * @param id   идентификатор комментария
-     * @return AdsCommentDto
+     * @return возвращает комментарий {@link AdsCommentDto}
      * @throws AdsCommentNotFoundException если комментарий не найден
      */
     @Operation(
@@ -121,8 +122,8 @@ public interface AdsApi {
      * Метод для получения всех комментариев объявления. Возвращает ResponseWrapperAdsComment. В полях которого Коллекция комментариев и счетчик их кол-ва.
      * В метод передается id объявления.
      *
-     * @param adPk
-     * @return ResponseWrapperAdsComment
+     * @param adPk ключ объявления
+     * @return возвращает все комментарии объявления {@link ResponseWrapperAdsComment}
      */
     @Operation(
             summary = "getAdsComments",
@@ -139,7 +140,7 @@ public interface AdsApi {
     /**
      * Метод для получения всех объявлений авторизованного пользователя. Возвращает список объявлений и счетчиком объявлений в виде ResponseWrapperAds
      *
-     * @return ResponseWrapperAds
+     * @return возвращает все объявления пользователя {@link ResponseWrapperAds}
      * @throws UserNotFoundException если пользователь не найден
      */
     @Operation(
@@ -158,7 +159,7 @@ public interface AdsApi {
      * Получение полной информации об объявлении (в т.ч. об авторе)
      *
      * @param id идентификатор объявления
-     * @return FullAds
+     * @return возвращает объявление {@link FullAds}
      * @throws org.springframework.web.client.HttpClientErrorException.NotFound если пользователь или объявление не найдены
      */
     @Operation(
@@ -177,7 +178,7 @@ public interface AdsApi {
      * Метод для удаления объявления по ID
      *
      * @param id идентификатор объявления
-     * @return AdsDto
+     * @return возвращает удалённое объявление {@link AdsDto}
      */
     @Operation(
             summary = "removeAds",
@@ -189,12 +190,12 @@ public interface AdsApi {
     ResponseEntity<AdsDto> removeAds(@Parameter(description = "id", required = true, schema = @Schema()) @Min(1) Integer id);
 
     /**
-     * метод для Обновление комментария
+     * метод для обновления комментария
      *
-     * @param adPk
-     * @param id
-     * @param adsCommentDto
-     * @return измененный комментарий AdsCommentDto
+     * @param adPk          ключ объявления
+     * @param id            идентификатор комментария
+     * @param adsCommentDto комментарий пользователя
+     * @return возвращает измененный комментарий {@link AdsCommentDto}
      * @throws org.springframework.web.client.HttpClientErrorException.NotFound если комментарий, объявление, или пользователь не найдены.
      */
     @Operation(
@@ -212,11 +213,11 @@ public interface AdsApi {
                                                    @Parameter(description = "comment", required = true, schema = @Schema()) @Valid AdsCommentDto adsCommentDto);
 
     /**
-     * Метод для  изменения объявления. Возвращает изменённое объявление
+     * Метод для изменения объявления. Возвращает изменённое объявление
      *
      * @param id        идентификатор объявления
      * @param createAds изменённое объявление
-     * @return AdsDto
+     * @return возвращает изменённое объявление {@link AdsDto}
      * @throws org.springframework.web.client.HttpClientErrorException.NotFound Если объявление не найдено
      */
     @Operation(
@@ -235,10 +236,10 @@ public interface AdsApi {
     /**
      * Обновление фотографии объявления
      *
-     * @param id
-     * @param file
-     * @return AdsDto
-     * @throws pro.sky.graduate_work_group5_team1.exeption.AdsNotFoundException если объявление не найдено
+     * @param id   идентификатор изображения объявления
+     * @param file изображение объявления
+     * @return возвращает объявление {@link AdsDto} с изменённым изображением
+     * @throws pro.sky.graduate_work_group5_team1.exception.AdsNotFoundException если объявление не найдено
      */
     @Operation(
             summary = "updateAdsImage",
