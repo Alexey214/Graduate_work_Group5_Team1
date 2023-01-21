@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService, UtilSecurity, UtilClassGrad
     public NewPassword setPassword(NewPassword newPassword, String email) {
         log.info("{}. Сохраняем пароль пользователя с email {}:", methodName(), email);
         User userTmp = userRepository.findByEmail(email)
-                .orElseThrow(ForbiddenException::new);
+                .orElseThrow(UnauthorizedException::new);
         if (!passwordEncoder.matches(newPassword.getCurrentPassword(), userTmp.getPassword())) {
             log.debug("{}. Неверный пароль пользователя", methodName());
             throw new UnauthorizedException("Неверный пароль пользователя");
