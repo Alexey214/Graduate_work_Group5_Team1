@@ -25,7 +25,6 @@ import pro.sky.graduate_work_group5_team1.service.UserService;
 public class UserController implements UserApi, UtilSecurity {
 
     private final UserService userService;
-
     private final UserPhotoService userPhotoService;
 
     @Override

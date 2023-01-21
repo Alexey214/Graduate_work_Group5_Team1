@@ -75,11 +75,7 @@ public interface UserApi {
     ResponseEntity<UserDto> updateUser(@Parameter(description = "user", required = true, schema = @Schema())
                                        @Valid UserDto user);
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
-    @GetMapping(value = "/me/image", produces = {MediaType.IMAGE_PNG_VALUE})
     byte[] getUserPhoto();
 
-    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
-    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseEntity<UserDto> patchUserPhoto(@RequestPart("image") MultipartFile file);
 }
