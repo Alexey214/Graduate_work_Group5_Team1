@@ -57,6 +57,9 @@ public class UserServiceImpl implements UserService, UtilSecurity, UtilClassGrad
             responseWrapperUser.setResults(userDtos);
             responseWrapperUser.setCount(userDtos.size());
         }
+        if (responseWrapperUser.getCount() == 0) {
+            throw new UserNotFoundException();
+        }
         return responseWrapperUser;
     }
 
