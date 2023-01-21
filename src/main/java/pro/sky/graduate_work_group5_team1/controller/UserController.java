@@ -22,6 +22,7 @@ public class UserController implements UserApi, UtilSecurity {
 
     private final UserService userService;
 
+
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PostMapping("/setPassword")
@@ -29,11 +30,13 @@ public class UserController implements UserApi, UtilSecurity {
         return ResponseEntity.ok(userService.setPassword(newPassword, login()));
     }
 
+
     @Override
     @GetMapping("/me")
     public ResponseEntity<ResponseWrapperUser> getUsers() {
         return ResponseEntity.ok(userService.getUsers());
     }
+
 
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
@@ -42,7 +45,7 @@ public class UserController implements UserApi, UtilSecurity {
         return ResponseEntity.ok(userService.updateUser(userDto));
     }
 
-    //Этот запрос вообще приходит? - Я нигде не встречал. В сваггере он работает корректно.
+
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping("/{id}")

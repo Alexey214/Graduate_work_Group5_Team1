@@ -58,7 +58,6 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     public AdsDto addAds(CreateAds createAds, MultipartFile file) {
         log.debug("{}. Добавляем объявление с title {}:", methodName(), createAds.getTitle());
         Ads adsToCommit = new Ads();
-
         adsToCommit.setDescription(createAds.getDescription());
         adsToCommit.setPrice(createAds.getPrice());
         adsToCommit.setTitle(createAds.getTitle());
@@ -134,7 +133,7 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
 
     @Override
     public FullAds getAds(Integer id) {
-        Ads ads = adsRepository.findById(id).orElseThrow(AdsCommentNotFoundException::new);
+        Ads ads = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
         User user = userRepository.findById(ads.getAuthor().getId()).orElseThrow(UserNotFoundException::new);
         FullAds fullAds = new FullAds();
         fullAds.setAuthorFirstName(user.getFirstName());
@@ -186,7 +185,7 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     @Override
     public AdsDto updateAds(Integer id, CreateAds createAds) {
         log.debug("{}. Изменяем объявление {}", methodName(), id);
-        Ads adsToPatch = adsRepository.findById(id).orElseThrow(AdsCommentNotFoundException::new);
+        Ads adsToPatch = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
         if (Objects.equals(adsToPatch.getAuthor().getId(), getUser().getId()) || getUser().getRoleEnum() == RegReq.RoleEnum.ADMIN) {
             adsToPatch.setDescription(createAds.getDescription());
             adsToPatch.setTitle(createAds.getTitle());
@@ -202,7 +201,7 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     @Override
     public Integer patchAdsImage(Integer id, MultipartFile file) {
         log.debug("{}. Изменяем картинку в объявлении {}", methodName(), id);
-        Ads adsToPatch = adsRepository.findById(id).orElseThrow(AdsCommentNotFoundException::new);
+        Ads adsToPatch = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
         if (Objects.equals(adsToPatch.getAuthor().getId(), getUser().getId()) || getUser().getRoleEnum() == RegReq.RoleEnum.ADMIN) {
             String[] imagePath = adsToPatch.getImage().split("/");
             Integer imageId = Integer.parseInt(imagePath[imagePath.length - 1]);

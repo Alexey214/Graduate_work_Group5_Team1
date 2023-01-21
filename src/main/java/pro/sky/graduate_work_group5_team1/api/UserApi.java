@@ -18,7 +18,13 @@ import javax.validation.constraints.Min;
 
 @Validated
 public interface UserApi {
-
+    /**
+     * Получение пользователя по Id
+     *
+     * @param id
+     * @return UserDto
+     * @throws pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException если пользователь не найден
+     */
     @Operation(
             summary = "getUsers",
             tags = "Пользователи",
@@ -31,6 +37,12 @@ public interface UserApi {
                     @ApiResponse(responseCode = "404", description = "Not Found")})
     ResponseEntity<UserDto> getUser(@Parameter(description = "id", required = true, schema = @Schema()) @Min(1) Integer id);
 
+    /**
+     * Метод для получения всех пользователей. Возвращает список пользователей со счетчиком в виде ResponseWrapperUser
+     *
+     * @return ResponseWrapperUser
+     * @throws pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException Если пользователи не найдены
+     */
     @Operation(
             summary = "getUsers",
             tags = "Пользователи",
@@ -43,6 +55,12 @@ public interface UserApi {
                     @ApiResponse(responseCode = "404", description = "Not Found")})
     ResponseEntity<ResponseWrapperUser> getUsers();
 
+    /**
+     * Изменение пароля пользователя
+     *
+     * @param newPassword
+     * @return NewPassword
+     */
     @Operation(
             summary = "setPassword",
             tags = "Пользователи",
@@ -57,6 +75,13 @@ public interface UserApi {
     ResponseEntity<NewPassword> setPassword(@Parameter(description = "newPassword", required = true, schema = @Schema())
                                             @Valid NewPassword newPassword);
 
+    /**
+     * Обновление данных пользователя
+     *
+     * @param user
+     * @return UserDto
+     * @throws pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException если пользователь не найден
+     */
     @Operation(
             summary = "updateUser",
             tags = "Пользователи",

@@ -23,11 +23,13 @@ public class AdsController implements AdsApi {
 
     private final AdsService adsService;
 
+
     @Override
     @GetMapping
     public ResponseEntity<ResponseWrapperAds> getALLAds() {
         return ResponseEntity.ok(adsService.getALLAds());
     }
+
 
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
@@ -37,12 +39,14 @@ public class AdsController implements AdsApi {
         return ResponseEntity.ok(adsService.addAds(createAds, file));
     }
 
+
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping("/{adPk}/comments")
     public ResponseEntity<ResponseWrapperAdsComment> getAdsComments(@PathVariable("adPk") @Min(1) Integer adPk) {
         return ResponseEntity.ok(adsService.getAdsComments(adPk));
     }
+
 
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
@@ -82,6 +86,7 @@ public class AdsController implements AdsApi {
         return ResponseEntity.ok(adsService.getAdsComment(adPk, id));
     }
 
+
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @DeleteMapping("/{adPk}/comments/{id}")
@@ -89,6 +94,7 @@ public class AdsController implements AdsApi {
                                                           @PathVariable("id") Integer id) {
         return ResponseEntity.ok(adsService.deleteAdsComment(adPk, id));
     }
+
 
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
@@ -99,12 +105,14 @@ public class AdsController implements AdsApi {
         return ResponseEntity.ok(adsService.updateAdsComment(adPk, id, adsCommentDto));
     }
 
+
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping("/me")
     public ResponseEntity<ResponseWrapperAds> getAdsMe() {
         return ResponseEntity.ok(adsService.getAdsMe());
     }
+
 
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
