@@ -39,25 +39,14 @@ public class UserController implements UserApi, UtilSecurity {
     @Override
     @GetMapping("/me")
     public ResponseEntity<ResponseWrapperUser> getUsers() {
-        ResponseWrapperUser responseWrapperUser = userService.getUsers();
-        if (responseWrapperUser.getCount() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(responseWrapperUser);
+        return ResponseEntity.ok(userService.getUsers());
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
-        if (userDto == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        UserDto user = userService.updateUser(userDto);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(userService.updateUser(userDto));
     }
 
     //Этот запрос вообще приходит? - Я нигде не встречал. В сваггере он работает корректно.
@@ -65,18 +54,6 @@ public class UserController implements UserApi, UtilSecurity {
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") Integer id) {
-        if (id < 0) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        UserDto userDto = null;
-        try {
-            userDto = userService.getUser(id);
-            if (userDto == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(userDto);
+        return ResponseEntity.ok(userService.getUser(id));
     }
 }
