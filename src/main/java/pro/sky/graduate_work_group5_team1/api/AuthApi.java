@@ -16,6 +16,12 @@ import javax.validation.Valid;
 @Validated
 public interface AuthApi {
 
+    /**
+     * Авторизация пользователя
+     *
+     * @param loginReq авторизационные данные
+     * @return в случае успеха возвращает {@link ResponseEntity#ok()}, либо {@link HttpStatus#FORBIDDEN}
+     */
     @Operation(
             summary = "login",
             tags = "Авторизация",
@@ -29,6 +35,12 @@ public interface AuthApi {
                     @ApiResponse(responseCode = "404", description = "Not Found")})
     ResponseEntity<LoginReq> login(@Valid LoginReq loginReq);
 
+    /**
+     * Регистрация пользователя
+     *
+     * @param regReq регистрационные данные
+     * @return в случае успеха возвращает {@link ResponseEntity#ok()}, либо {@link HttpStatus#BAD_REQUEST}
+     */
     @Operation(
             summary = "register",
             tags = "Авторизация",

@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException;
+import pro.sky.graduate_work_group5_team1.exception.UserNotFoundException;
 import pro.sky.graduate_work_group5_team1.model.User;
 import pro.sky.graduate_work_group5_team1.model.dto.RegReq;
 import pro.sky.graduate_work_group5_team1.repository.UserRepository;

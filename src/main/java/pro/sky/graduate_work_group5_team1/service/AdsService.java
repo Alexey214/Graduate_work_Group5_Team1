@@ -28,7 +28,7 @@ public interface AdsService {
      *
      * @param adPk ключ объявления, в котором написан комментарий
      * @param id   идентификатор комментария
-     * @return
+     * @return удалённый {@link AdsCommentDto}
      */
     AdsCommentDto deleteAdsComment(Integer adPk, Integer id);
 
@@ -57,7 +57,7 @@ public interface AdsService {
     ResponseWrapperAdsComment getAdsComments(Integer adPk);
 
     /**
-     * Метод загадка
+     * Метод для получения созданных текущим пользователем объявлений
      */
     ResponseWrapperAds getAdsMe();
 
@@ -73,7 +73,7 @@ public interface AdsService {
      * Метод для удаления объявления
      *
      * @param id идентификатор объявления
-     * @return
+     * @return возвращает удалённый {@link AdsDto} в случае успеха, либо {@link pro.sky.graduate_work_group5_team1.exception.ForbiddenException}
      */
     AdsDto removeAds(Integer id);
 
@@ -96,5 +96,12 @@ public interface AdsService {
      */
     AdsDto updateAds(Integer id, CreateAds createAds);
 
+    /**
+     * Метод изменения изображения объявления
+     *
+     * @param id   идентификатор объявления
+     * @param file новые графические данные
+     * @return возвращает "1" в случае успеха, "0" в случае неудачной операции
+     */
     Integer patchAdsImage(Integer id, MultipartFile file);
 }
