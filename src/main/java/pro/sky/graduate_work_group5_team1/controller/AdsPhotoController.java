@@ -18,6 +18,11 @@ public class AdsPhotoController {
 
     private final AdsPhotoServiceImpl adsPhotoServiceImpl;
 
+    /**
+     * метод для получения фото объявления.
+     * @param id
+     * @return byte []
+     */
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping(value = "/images/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
     public byte[] getImage(@PathVariable("id") Long id) {

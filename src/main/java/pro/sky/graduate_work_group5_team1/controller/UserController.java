@@ -22,6 +22,11 @@ public class UserController implements UserApi, UtilSecurity {
 
     private final UserService userService;
 
+    /**
+     * Изменение пароля пользователя
+     * @param newPassword
+     * @return NewPassword
+     */
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PostMapping("/setPassword")
@@ -29,12 +34,23 @@ public class UserController implements UserApi, UtilSecurity {
         return ResponseEntity.ok(userService.setPassword(newPassword, login()));
     }
 
+    /**
+     * Метод для получения всех пользователей. Возвращает список пользователей со счетчиком в виде ResponseWrapperUser
+     * @throws pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException Если пользователи не найдены
+     * @return ResponseWrapperUser
+     */
     @Override
     @GetMapping("/me")
     public ResponseEntity<ResponseWrapperUser> getUsers() {
         return ResponseEntity.ok(userService.getUsers());
     }
 
+    /**
+     * Обновление данных пользователя
+     * @throws pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException если пользователь не найден
+     * @param userDto
+     * @return UserDto
+     */
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PatchMapping("/me")
@@ -42,7 +58,12 @@ public class UserController implements UserApi, UtilSecurity {
         return ResponseEntity.ok(userService.updateUser(userDto));
     }
 
-    //Этот запрос вообще приходит? - Я нигде не встречал. В сваггере он работает корректно.
+    /**
+     * Получение пользователя по Id
+     * @throws pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException если пользователь не найден
+     * @param id
+     * @return UserDto
+     */
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping("/{id}")

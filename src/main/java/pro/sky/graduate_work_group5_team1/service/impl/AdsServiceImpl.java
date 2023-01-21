@@ -133,7 +133,7 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
 
     @Override
     public FullAds getAds(Integer id) {
-        Ads ads = adsRepository.findById(id).orElseThrow(AdsCommentNotFoundException::new);
+        Ads ads = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
         User user = userRepository.findById(ads.getAuthor().getId()).orElseThrow(UserNotFoundException::new);
         FullAds fullAds = new FullAds();
         fullAds.setAuthorFirstName(user.getFirstName());
