@@ -60,7 +60,7 @@ public class UserController implements UserApi, UtilSecurity {
         return ResponseEntity.ok(user);
     }
 
-    //Этот запрос вообще приходит? - Я нигде не встречал. В свагере он работает корректно.
+    //Этот запрос вообще приходит? - Я нигде не встречал. В сваггере он работает корректно.
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping("/{id}")

@@ -55,7 +55,7 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     }
 
     @Override
-    public AdsDto addAds(CreateAds createAds, MultipartFile file, User user) {
+    public AdsDto addAds(CreateAds createAds, MultipartFile file) {
         log.debug("{}. Добавляем объявление с title {}:", methodName(), createAds.getTitle());
         Ads adsToCommit = new Ads();
 
@@ -64,18 +64,18 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
         adsToCommit.setTitle(createAds.getTitle());
         String photoPath = adsPhotoService.savePhoto(file);
         adsToCommit.setImage(photoPath);
-        adsToCommit.setAuthor(user);
+        adsToCommit.setAuthor(getUser());
 
         adsRepository.save(adsToCommit);
         return adsMapper.toDto(adsToCommit);
     }
 
     @Override
-    public AdsCommentDto deleteAdsComment(Integer adPk, Integer id, User user) {
+    public AdsCommentDto deleteAdsComment(Integer adPk, Integer id) {
         log.info("{}. Удаляем комментарий с id {}, относящийся к объявлению с ключом {}", methodName(), id, adPk);
         AdsComment adsComment = adsCommentRepository.findAdsCommentByPkAndId(adPk, id)
                 .orElseThrow(AdsCommentNotFoundException::new);
-        if (Objects.equals(adsComment.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
+        if (Objects.equals(adsComment.getAuthor().getId(), getUser().getId()) || getUser().getRoleEnum() == RegReq.RoleEnum.ADMIN) {
             adsCommentRepository.deleteById(adsComment.getId());
             log.warn("Комментарий с id {} удален", id);
             return adsCommentMapper.toDto(adsComment);
@@ -151,10 +151,10 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     }
 
     @Override
-    public AdsDto removeAds(Integer id, User user) {
+    public AdsDto removeAds(Integer id) {
         log.info("{}. Удаляем объявление с id {}:", methodName(), id);
         Ads ads = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
-        if (Objects.equals(ads.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
+        if (Objects.equals(ads.getAuthor().getId(), getUser().getId()) || getUser().getRoleEnum() == RegReq.RoleEnum.ADMIN) {
             adsPhotoService.deleteImage(ads.getImage());
             adsRepository.deleteById(id);
             log.warn("{}. Объявление с id {} удалено", methodName(), id);
@@ -165,13 +165,13 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     }
 
     @Override
-    public AdsCommentDto updateAdsComment(Integer adPk, Integer id, AdsCommentDto adsCommentDto, User user) {
+    public AdsCommentDto updateAdsComment(Integer adPk, Integer id, AdsCommentDto adsCommentDto) {
         AdsComment adsComment = adsCommentRepository.findAdsCommentByPkAndId(adPk, id)
                 .orElseThrow(AdsCommentNotFoundException::new);
-        if (Objects.equals(adsComment.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
+        if (Objects.equals(adsComment.getAuthor().getId(), getUser().getId()) || getUser().getRoleEnum() == RegReq.RoleEnum.ADMIN) {
             log.debug("{}. Изменяем комментарий {}, с id {} и относящийся к объявлению с ключом {}",
                     methodName(), adsComment, id, adPk);
-            adsComment.setAuthor(userRepository.findById(user.getId()).orElseThrow(UserNotFoundException::new));
+            adsComment.setAuthor(userRepository.findById(getUser().getId()).orElseThrow(UserNotFoundException::new));
             adsComment.setPk(adsRepository.findById(adPk).orElseThrow(AdsNotFoundException::new));
             adsComment.setText(adsCommentDto.getText());
             adsComment.setCreatedAt(LocalDateTime.now());
@@ -184,10 +184,10 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     }
 
     @Override
-    public AdsDto updateAds(Integer id, CreateAds createAds, User user) {
+    public AdsDto updateAds(Integer id, CreateAds createAds) {
         log.debug("{}. Изменяем объявление {}", methodName(), id);
         Ads adsToPatch = adsRepository.findById(id).orElseThrow(AdsCommentNotFoundException::new);
-        if (Objects.equals(adsToPatch.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
+        if (Objects.equals(adsToPatch.getAuthor().getId(), getUser().getId()) || getUser().getRoleEnum() == RegReq.RoleEnum.ADMIN) {
             adsToPatch.setDescription(createAds.getDescription());
             adsToPatch.setTitle(createAds.getTitle());
             adsToPatch.setPrice(createAds.getPrice());
@@ -200,10 +200,10 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     }
 
     @Override
-    public Integer patchAdsImage(Integer id, MultipartFile file, User user) {
+    public Integer patchAdsImage(Integer id, MultipartFile file) {
         log.debug("{}. Изменяем картинку в объявлении {}", methodName(), id);
         Ads adsToPatch = adsRepository.findById(id).orElseThrow(AdsCommentNotFoundException::new);
-        if (Objects.equals(adsToPatch.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
+        if (Objects.equals(adsToPatch.getAuthor().getId(), getUser().getId()) || getUser().getRoleEnum() == RegReq.RoleEnum.ADMIN) {
             String[] imagePath = adsToPatch.getImage().split("/");
             Integer imageId = Integer.parseInt(imagePath[imagePath.length - 1]);
             adsPhotoService.patchPhoto(imageId, file);

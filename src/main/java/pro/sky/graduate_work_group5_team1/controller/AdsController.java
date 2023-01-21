@@ -28,11 +28,7 @@ public class AdsController implements AdsApi {
     @Override
     @GetMapping
     public ResponseEntity<ResponseWrapperAds> getALLAds() {
-        ResponseWrapperAds responseWrapperAds = adsService.getALLAds();
-//        if (responseWrapperAds.getCount() == 0) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-        return ResponseEntity.ok(responseWrapperAds);
+        return ResponseEntity.ok(adsService.getALLAds());
     }
 
     @Override
@@ -43,9 +39,7 @@ public class AdsController implements AdsApi {
         if (createAds == null || file == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) auth.getPrincipal();
-        AdsDto adsDto = adsService.addAds(createAds, file, user);
+        AdsDto adsDto = adsService.addAds(createAds, file);
         if (adsDto == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.ok(adsDto);
@@ -105,11 +99,9 @@ public class AdsController implements AdsApi {
         if (id < 0) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) auth.getPrincipal();
         AdsDto adsDto = null;
         try {
-            adsDto = adsService.removeAds(id, user);
+            adsDto = adsService.removeAds(id);
         } catch (ForbiddenException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -127,9 +119,7 @@ public class AdsController implements AdsApi {
         if (id < 0 && createAds == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) auth.getPrincipal();
-        AdsDto adsDtoTmp = adsService.updateAds(id, createAds, user);
+        AdsDto adsDtoTmp = adsService.updateAds(id, createAds);
         if (adsDtoTmp == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -162,11 +152,9 @@ public class AdsController implements AdsApi {
         if (Integer.parseInt(adPk) < 0 && id < 0) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) auth.getPrincipal();
         AdsCommentDto adsCommentDto = null;
         try {
-            adsCommentDto = adsService.deleteAdsComment(Integer.parseInt(adPk), id, user);
+            adsCommentDto = adsService.deleteAdsComment(Integer.parseInt(adPk), id);
         } catch (ForbiddenException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -185,11 +173,9 @@ public class AdsController implements AdsApi {
         if (Integer.parseInt(adPk) < 0 && id < 0 && adsCommentDto == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) auth.getPrincipal();
         AdsCommentDto adsCommentDtoTmp = null;
         try {
-            adsCommentDtoTmp = adsService.updateAdsComment(Integer.parseInt(adPk), id, adsCommentDto, user);
+            adsCommentDtoTmp = adsService.updateAdsComment(Integer.parseInt(adPk), id, adsCommentDto);
         } catch (ForbiddenException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -210,9 +196,7 @@ public class AdsController implements AdsApi {
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdsDto> updateAdsImage(@PathVariable("id") Integer id, @RequestPart("image") MultipartFile file) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) auth.getPrincipal();
-        if (adsService.patchAdsImage(id, file, user) == 1) {
+        if (adsService.patchAdsImage(id, file) == 1) {
             return ResponseEntity.ok(null);
         } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
