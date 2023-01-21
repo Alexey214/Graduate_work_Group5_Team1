@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.graduate_work_group5_team1.api.AdsApi;
+import pro.sky.graduate_work_group5_team1.exeption.ForbiddenException;
 import pro.sky.graduate_work_group5_team1.model.User;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
 import pro.sky.graduate_work_group5_team1.service.AdsService;
@@ -106,7 +107,12 @@ public class AdsController implements AdsApi {
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) auth.getPrincipal();
-        AdsDto adsDto = adsService.removeAds(id, user);
+        AdsDto adsDto = null;
+        try {
+            adsDto = adsService.removeAds(id, user);
+        } catch (ForbiddenException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         if (adsDto == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -158,7 +164,12 @@ public class AdsController implements AdsApi {
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) auth.getPrincipal();
-        AdsCommentDto adsCommentDto = adsService.deleteAdsComment(Integer.parseInt(adPk), id, user);
+        AdsCommentDto adsCommentDto = null;
+        try {
+            adsCommentDto = adsService.deleteAdsComment(Integer.parseInt(adPk), id, user);
+        } catch (ForbiddenException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         if (adsCommentDto == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -176,7 +187,12 @@ public class AdsController implements AdsApi {
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) auth.getPrincipal();
-        AdsCommentDto adsCommentDtoTmp = adsService.updateAdsComment(Integer.parseInt(adPk), id, adsCommentDto, user);
+        AdsCommentDto adsCommentDtoTmp = null;
+        try {
+            adsCommentDtoTmp = adsService.updateAdsComment(Integer.parseInt(adPk), id, adsCommentDto, user);
+        } catch (ForbiddenException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         if (adsCommentDtoTmp == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

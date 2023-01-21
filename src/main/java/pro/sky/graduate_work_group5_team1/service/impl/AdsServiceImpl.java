@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.graduate_work_group5_team1.exeption.AdsCommentNotFoundException;
 import pro.sky.graduate_work_group5_team1.exeption.AdsNotFoundException;
+import pro.sky.graduate_work_group5_team1.exeption.ForbiddenException;
 import pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException;
 import pro.sky.graduate_work_group5_team1.mapper.AdsCommentMapper;
 import pro.sky.graduate_work_group5_team1.mapper.AdsListMapper;
@@ -77,8 +78,10 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
         if (Objects.equals(adsComment.getAuthor().getId(), user.getId()) || user.getRoleEnum() == RegReq.RoleEnum.ADMIN) {
             adsCommentRepository.deleteById(adsComment.getId());
             log.warn("Комментарий с id {} удален", id);
+            return adsCommentMapper.toDto(adsComment);
         }
-        return adsCommentMapper.toDto(adsComment);
+        log.warn("Комментарий с id {} не может быть удален данным пользователем", id);
+        throw new ForbiddenException();
     }
 
     @Override
@@ -104,7 +107,7 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
     public ResponseWrapperAdsComment getAdsComments(Integer adPk) {
         log.info("{}. Получаем все комментарии одного объявления с pk " + adPk, methodName());
         List<AdsComment> adsCommentList = adsCommentRepository.findAdsCommentsByPk(adPk);
-        List<AdsCommentDto> adsCommentDtoList = new ArrayList<AdsCommentDto>(adsCommentList.size());
+        List<AdsCommentDto> adsCommentDtoList = new ArrayList<>(adsCommentList.size());
         for (AdsComment adsComment : adsCommentList) {
             adsCommentDtoList.add(adsCommentMapper.toDto(adsComment));
         }
@@ -155,8 +158,10 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
             adsPhotoService.deleteImage(ads.getImage());
             adsRepository.deleteById(id);
             log.warn("{}. Объявление с id {} удалено", methodName(), id);
+            return adsMapper.toDto(ads);
         }
-        return adsMapper.toDto(ads);
+        log.warn("{}. Объявление с id {} принадлежит другому пользователю", methodName(), id);
+        throw new ForbiddenException();
     }
 
     @Override
@@ -171,8 +176,11 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
             adsComment.setText(adsCommentDto.getText());
             adsComment.setCreatedAt(LocalDateTime.now());
             adsCommentRepository.save(adsComment);
+            return adsCommentDto;
         }
-        return adsCommentDto;
+        log.warn("{}. Изменяемый комментарий {}, с id {} и относящийся к объявлению с ключом {} принадлежит другому пользователю",
+                methodName(), adsComment, id, adPk);
+        throw new ForbiddenException();
     }
 
     @Override
