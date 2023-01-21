@@ -25,12 +25,26 @@ public class AdsController implements AdsApi {
 
     private final AdsService adsService;
 
+    /**
+     * Метод для получения всех объявлений. Возвращает ResponseWrapperAds. В полях которого Коллекция объявленийц и счетчик их кол-ва.
+     * @return ResponseWrapperAds
+     */
     @Override
     @GetMapping
     public ResponseEntity<ResponseWrapperAds> getALLAds() {
         return ResponseEntity.ok(adsService.getALLAds());
     }
 
+    /**
+     * Метод для добавления объявления. Принимает текстовые данные и мультипарт файл фотографии.
+     *
+     * @throws org.springframework.web.client.HttpClientErrorException.Forbidden если текст объявления или фото не передано
+     * @throws pro.sky.graduate_work_group5_team1.exeption.UnauthorizedException если пользователь не авторизован
+     * @throws org.springframework.web.client.HttpClientErrorException.NotFound если не удалось создать обьявление
+     * @param createAds
+     * @param file
+     * @return AdsDto
+     */
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -45,6 +59,14 @@ public class AdsController implements AdsApi {
         return ResponseEntity.ok(adsDto);
     }
 
+    /**
+     * Метод для получения всех комментариев объявления. Возвращает ResponseWrapperAdsComment. В полях которого Коллекция комментариев и счетчик их кол-ва.
+     * В метод передается id объявления.
+     * @throws org.springframework.web.client.HttpClientErrorException.Forbidden если передано неправильное число (меньше 0)
+     * @throws org.springframework.web.client.HttpClientErrorException.NotFound если комментарии не найдены.
+     * @param adPk
+     * @return ResponseWrapperAdsComment
+     */
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping("/{adPk}/comments")
@@ -63,6 +85,15 @@ public class AdsController implements AdsApi {
         return ResponseEntity.ok(responseWrapperAdsComment);
     }
 
+    /**
+     * Метод для добавления комментария к объявлению. В метод передается айди объявления и сущность комментария.
+     *
+     * @throws org.springframework.web.client.HttpClientErrorException.Forbidden если передан ID объявления (меньше 0) или комментарий не сохранился.
+     * @throws org.springframework.web.client.HttpClientErrorException.NotFound если автор объявления не найден
+     * @param adPk
+     * @param adsCommentDto
+     * @return AdsCommentDto
+     */
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PostMapping("/{adPk}/comments")
@@ -77,7 +108,12 @@ public class AdsController implements AdsApi {
         }
         return ResponseEntity.ok(adsCommentDtoTmp);
     }
-
+    /**
+     * Получение полной информации об объявлении (в т.ч. об авторе)
+     *
+     * @param id идентификатор объявления
+     * @return  FullAds
+     */
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @GetMapping("/{id}")
@@ -91,7 +127,12 @@ public class AdsController implements AdsApi {
         }
         return ResponseEntity.ok(fullAds);
     }
-
+    /**
+     * Метод для удаления объявления по ID
+     *
+     * @param id идентификатор объявления
+     * @return AdsDto
+     */
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @DeleteMapping("/{id}")
@@ -111,7 +152,13 @@ public class AdsController implements AdsApi {
 
         return ResponseEntity.ok(adsDto);
     }
-
+    /**
+     * Метод для  изменения объявления. Возвращает изменённое объявление
+     * @throws org.springframework.web.client.HttpClientErrorException.Forbidden если передан ID объявления (меньше 0) или объявление не сохранилось.
+     * @param id        идентификатор объявления
+     * @param createAds изменённое объявление
+     * @return  AdsDto
+     */
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PatchMapping("/{id}")

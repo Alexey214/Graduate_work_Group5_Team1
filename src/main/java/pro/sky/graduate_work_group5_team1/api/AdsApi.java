@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
+import pro.sky.graduate_work_group5_team1.exeption.ForbiddenException;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
 
 import javax.validation.Valid;
