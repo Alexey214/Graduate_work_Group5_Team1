@@ -23,7 +23,7 @@ public interface AdsService {
      * @param createAds экземпляр нового объявления
      * @return возвращает экземпляр класса {@link AdsDto}
      */
-    AdsDto addAds(CreateAds createAds, MultipartFile file, User userId);
+    AdsDto addAds(CreateAds createAds, MultipartFile file);
 
     /**
      * Метод для удаления комментария
@@ -32,7 +32,7 @@ public interface AdsService {
      * @param id   идентификатор комментария
      * @return
      */
-    AdsCommentDto deleteAdsComment(Integer adPk, Integer id, User user);
+    AdsCommentDto deleteAdsComment(Integer adPk, Integer id);
 
     /**
      * Метод для получения списка всех объявлений с указанием их количества
@@ -77,7 +77,7 @@ public interface AdsService {
      * @param id идентификатор объявления
      * @return
      */
-    AdsDto removeAds(Integer id, User user);
+    AdsDto removeAds(Integer id);
 
     /**
      * Метод для изменения комментария
@@ -87,16 +87,16 @@ public interface AdsService {
      * @param adsCommentDto изменённый комментарий
      * @return возвращает изменённый экземпляр {@link AdsCommentDto}
      */
-    AdsCommentDto updateAdsComment(Integer adPk, Integer id, AdsCommentDto adsCommentDto, User user);
+    AdsCommentDto updateAdsComment(Integer adPk, Integer id, AdsCommentDto adsCommentDto);
 
     /**
      * Метод изменения объявления
      *
-     * @param id     идентификатор объявления
+     * @param id        идентификатор объявления
      * @param createAds изменённое объявление
      * @return возвращает изменённый экземпляр {@link AdsDto}
      */
-    AdsDto updateAds(Integer id, CreateAds createAds, User user);
+    AdsDto updateAds(Integer id, CreateAds createAds);
 
-    Integer patchAdsImage(Integer id, MultipartFile file, User user);
+    Integer patchAdsImage(Integer id, MultipartFile file);
 }
