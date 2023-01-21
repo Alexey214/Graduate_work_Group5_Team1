@@ -8,7 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 //import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 import pro.sky.graduate_work_group5_team1.model.dto.NewPassword;
 import pro.sky.graduate_work_group5_team1.model.dto.ResponseWrapperUser;
 import pro.sky.graduate_work_group5_team1.model.dto.UserDto;
@@ -69,4 +74,12 @@ public interface UserApi {
                     @ApiResponse(responseCode = "403", description = "Forbidden")})
     ResponseEntity<UserDto> updateUser(@Parameter(description = "user", required = true, schema = @Schema())
                                        @Valid UserDto user);
+
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
+    @GetMapping(value = "/me/image", produces = {MediaType.IMAGE_PNG_VALUE})
+    byte[] getUserPhoto();
+
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
+    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<UserDto> patchUserPhoto(@RequestPart("image") MultipartFile file);
 }

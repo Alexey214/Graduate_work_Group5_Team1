@@ -10,7 +10,8 @@ CREATE TABLE users
     last_name  VARCHAR(255),
     password   VARCHAR(255),
     phone      VARCHAR(255),
-    role_enum  INTEGER
+    role_enum  INTEGER,
+    image      VARCHAR(255)
 );
 
 -- changeset Shkril:2
@@ -71,3 +72,12 @@ CREATE TABLE ads_photo
 
 ALTER TABLE ads_photo
     ADD CONSTRAINT FK_ADSPHOTO_ON_ADS FOREIGN KEY (ads_id) REFERENCES ads (id);
+
+-- changeset trofimovF:6
+CREATE TABLE user_photo
+(
+    id         BIGINT NOT NULL,
+    file_size  BIGINT NOT NULL,
+    media_type VARCHAR(255),
+    data       OID
+);

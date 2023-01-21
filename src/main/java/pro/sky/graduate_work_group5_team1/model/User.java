@@ -33,6 +33,7 @@ public class User implements UserDetails {
     private String lastName;
     private String password;
     private String phone;
+    private String image;
     @Enumerated(EnumType.ORDINAL)
     private RegReq.RoleEnum roleEnum;
 

@@ -12,6 +12,7 @@ import pro.sky.graduate_work_group5_team1.model.User;
 import pro.sky.graduate_work_group5_team1.model.dto.RegReq;
 import pro.sky.graduate_work_group5_team1.repository.UserRepository;
 import pro.sky.graduate_work_group5_team1.service.AuthService;
+import pro.sky.graduate_work_group5_team1.service.UserPhotoService;
 import pro.sky.graduate_work_group5_team1.util.UtilClassGraduate;
 
 import java.util.NoSuchElementException;
@@ -25,6 +26,8 @@ public class AuthServiceImpl implements AuthService, UtilClassGraduate {
     private final UserDetailsService manager;
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
+
+    private final UserPhotoService userPhotoService;
 
 
     @Override
@@ -57,6 +60,7 @@ public class AuthServiceImpl implements AuthService, UtilClassGraduate {
         userTmp.setFirstName(registerReq.getFirstName());
         userTmp.setLastName(registerReq.getLastName());
         userTmp.setPhone(registerReq.getPhone());
+        userTmp.setImage(userPhotoService.createEmptyPhoto());
         userRepository.save(userTmp);
         return true;
     }

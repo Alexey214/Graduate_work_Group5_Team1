@@ -59,8 +59,6 @@ public class AdsPhotoServiceImpl implements AdsPhotoService, UtilClassGraduate {
         AdsPhoto adsPhoto = new AdsPhoto();
         adsPhoto.setFileSize(file.getSize());
         adsPhoto.setMediaType(file.getContentType());
-        String fileName = file.getOriginalFilename();
-        assert fileName != null;
         try {
             adsPhoto.setData(file.getBytes());
         } catch (IOException e) {
