@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 //import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.graduate_work_group5_team1.model.dto.NewPassword;
@@ -26,9 +23,9 @@ public interface UserApi {
     /**
      * Получение пользователя по Id
      *
-     * @param id
-     * @return UserDto
-     * @throws pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException если пользователь не найден
+     * @param id идентификатор пользователя
+     * @return возвращает пользователя {@link UserDto}
+     * @throws pro.sky.graduate_work_group5_team1.exception.UserNotFoundException если пользователь не найден
      */
     @Operation(
             summary = "getUsers",
@@ -45,8 +42,8 @@ public interface UserApi {
     /**
      * Метод для получения всех пользователей. Возвращает список пользователей со счетчиком в виде ResponseWrapperUser
      *
-     * @return ResponseWrapperUser
-     * @throws pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException Если пользователи не найдены
+     * @return возвращает всех пользователей {@link ResponseWrapperUser}
+     * @throws pro.sky.graduate_work_group5_team1.exception.UserNotFoundException Если пользователи не найдены
      */
     @Operation(
             summary = "getUsers",
@@ -63,8 +60,8 @@ public interface UserApi {
     /**
      * Изменение пароля пользователя
      *
-     * @param newPassword
-     * @return NewPassword
+     * @param newPassword новый пароль пользователя
+     * @return возвращает новый пароль {@link NewPassword}
      */
     @Operation(
             summary = "setPassword",
@@ -83,9 +80,9 @@ public interface UserApi {
     /**
      * Обновление данных пользователя
      *
-     * @param user
-     * @return UserDto
-     * @throws pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException если пользователь не найден
+     * @param user изменённый пользователь
+     * @return возвращает изменённого пользователя {@link UserDto}
+     * @throws pro.sky.graduate_work_group5_team1.exception.UserNotFoundException если пользователь не найден
      */
     @Operation(
             summary = "updateUser",
@@ -100,7 +97,31 @@ public interface UserApi {
     ResponseEntity<UserDto> updateUser(@Parameter(description = "user", required = true, schema = @Schema())
                                        @Valid UserDto user);
 
+    /**
+     * Получение изображения пользователя
+     *
+     * @return аватар пользователя
+     */
+    @Operation(
+            summary = "getUserPhoto",
+            tags = "Пользователи",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(
+                            mediaType = MediaType.IMAGE_PNG_VALUE))})
     byte[] getUserPhoto();
 
+    /**
+     * Изменение изображения пользователя
+     *
+     * @param file аватар пользователя
+     * @return возвращает пользователя {@link UserDto} с изменённым аватаром
+     */
+    @Operation(
+            summary = "patchUserPhoto",
+            tags = "Пользователи",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = UserDto.class)))})
     ResponseEntity<UserDto> patchUserPhoto(@RequestPart("image") MultipartFile file);
 }
