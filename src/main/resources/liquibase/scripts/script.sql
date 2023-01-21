@@ -9,6 +9,7 @@ CREATE TABLE users
     first_name VARCHAR(255),
     last_name  VARCHAR(255),
     password   VARCHAR(255),
+    reg_Date TIMESTAMP WITHOUT TIME ZONE,
     phone      VARCHAR(255),
     role_enum  INTEGER,
     image      VARCHAR(255)
@@ -24,11 +25,15 @@ CREATE TABLE ads
     price       INTEGER,
     title       VARCHAR(255),
     user_id     INTEGER,
+    photo_id    BIGINT,
     CONSTRAINT pk_ads PRIMARY KEY (id)
 );
 
 ALTER TABLE ads
     ADD CONSTRAINT FK_ADS_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
+
+-- ALTER TABLE ads
+--     ADD CONSTRAINT FK_ADS_ON_ADSPHOTO FOREIGN KEY (photo_id) REFERENCES ads_photo (id);
 
 -- changeset Shkril:3
 
@@ -62,16 +67,11 @@ create sequence photo_id_seq;
 CREATE TABLE ads_photo
 (
     id         BIGINT NOT NULL,
-    file_path  VARCHAR(255),
     file_size  BIGINT NOT NULL,
     media_type VARCHAR(255),
     data       OID,
-    ads_id     INTEGER,
     CONSTRAINT pk_adsphoto PRIMARY KEY (id)
 );
-
-ALTER TABLE ads_photo
-    ADD CONSTRAINT FK_ADSPHOTO_ON_ADS FOREIGN KEY (ads_id) REFERENCES ads (id);
 
 -- changeset trofimovF:6
 CREATE TABLE user_photo

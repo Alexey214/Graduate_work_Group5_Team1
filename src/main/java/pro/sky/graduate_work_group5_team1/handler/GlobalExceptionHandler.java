@@ -53,14 +53,6 @@ public class GlobalExceptionHandler {
                 .body("Пользователь не найден!");
     }
 
-    @ExceptionHandler(ImageNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> handleImageNotFoundException(ImageNotFoundException e) {
-        log.error("Изображение не найдено!");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("Изображение не найдено!");
-    }
-
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<String> handleUnauthorizedException(UnauthorizedException e) {

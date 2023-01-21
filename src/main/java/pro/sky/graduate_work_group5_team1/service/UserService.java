@@ -18,14 +18,6 @@ public interface UserService {
     UserDto getUser(Integer id);
 
     /**
-     * Метод поиска пользователя по email
-     *
-     * @param email персональный идентификатор пользователя
-     * @return пользователя с заданным email, либо {@link UserNotFoundException}
-     */
-    UserDto getUser(String email);
-
-    /**
      * Метод поиска всех пользователей
      *
      * @return экземпляр {@link ResponseWrapperUser}, внутри которого содержится {@link List<UserDto>}
@@ -48,4 +40,5 @@ public interface UserService {
      */
     UserDto updateUser(UserDto userDto);
 
+    UserDto deleteUser();
 }

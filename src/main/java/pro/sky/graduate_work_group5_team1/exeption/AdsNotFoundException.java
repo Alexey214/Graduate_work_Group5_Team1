@@ -7,7 +7,4 @@ public class AdsNotFoundException extends RuntimeException {
         System.out.printf("%s. Объявление не найдено%n", getClass().getSimpleName());
     }
 
-    public AdsNotFoundException(String message) {
-        super(message);
-    }
 }

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pro.sky.graduate_work_group5_team1.exeption.ForbiddenException;
 import pro.sky.graduate_work_group5_team1.exeption.UnauthorizedException;
 import pro.sky.graduate_work_group5_team1.exeption.UserNotFoundException;
 import pro.sky.graduate_work_group5_team1.model.dto.*;
@@ -34,15 +33,6 @@ public class UserServiceImpl implements UserService, UtilSecurity, UtilClassGrad
                 .map(userMapper::toDto)
                 .orElseThrow(UserNotFoundException::new);
     }
-
-    @Override
-    public UserDto getUser(String email) {
-        log.info("{}. Получаем пользователя с email {}:", methodName(), email);
-        return userRepository.findByEmail(email)
-                .map(userMapper::toDto)
-                .orElseThrow(UserNotFoundException::new);
-    }
-
 
     @Override
     public ResponseWrapperUser getUsers() {
@@ -87,6 +77,12 @@ public class UserServiceImpl implements UserService, UtilSecurity, UtilClassGrad
         userDtoTmp.setFirstName(userDto.getFirstName());
         userDtoTmp.setLastName(userDto.getLastName());
         return userMapper.toDto(userRepository.save(userDtoTmp));
+    }
+
+    @Override
+    public UserDto deleteUser() {
+        userRepository.delete(getUser());
+        return null;
     }
 
 }

@@ -10,8 +10,6 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = AdsMapper.class, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface AdsListMapper {
 
-    List<Ads> toModelList(List<AdsDto> adsDtoList);
-
     List<AdsDto> toDtoList(List<Ads> adsList);
 
 }

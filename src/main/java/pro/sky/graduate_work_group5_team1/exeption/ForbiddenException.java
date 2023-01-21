@@ -6,7 +6,4 @@ public class ForbiddenException extends RuntimeException {
         System.out.printf("%s. Неверные данные%n", getClass().getSimpleName());
     }
 
-    public ForbiddenException(String message) {
-        super(message);
-    }
 }

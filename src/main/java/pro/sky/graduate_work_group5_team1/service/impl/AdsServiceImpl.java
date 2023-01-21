@@ -2,7 +2,6 @@ package pro.sky.graduate_work_group5_team1.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.graduate_work_group5_team1.exeption.AdsCommentNotFoundException;
@@ -61,8 +60,8 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
         adsToCommit.setDescription(createAds.getDescription());
         adsToCommit.setPrice(createAds.getPrice());
         adsToCommit.setTitle(createAds.getTitle());
-        String photoPath = adsPhotoService.savePhoto(file);
-        adsToCommit.setImage(photoPath);
+        adsToCommit.setAdsPhoto(adsPhotoService.savePhoto(file));
+        adsToCommit.setImage("/images/" + adsToCommit.getAdsPhoto().getId());
         adsToCommit.setAuthor(getUser());
 
         adsRepository.save(adsToCommit);
@@ -154,7 +153,7 @@ public class AdsServiceImpl implements AdsService, UtilSecurity, UtilClassGradua
         log.info("{}. Удаляем объявление с id {}:", methodName(), id);
         Ads ads = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
         if (Objects.equals(ads.getAuthor().getId(), getUser().getId()) || getUser().getRoleEnum() == RegReq.RoleEnum.ADMIN) {
-            adsPhotoService.deleteImage(ads.getImage());
+//            adsPhotoService.deleteImage(ads.getImage());
             adsRepository.deleteById(id);
             log.warn("{}. Объявление с id {} удалено", methodName(), id);
             return adsMapper.toDto(ads);

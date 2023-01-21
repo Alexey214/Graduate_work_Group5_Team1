@@ -15,6 +15,7 @@ import pro.sky.graduate_work_group5_team1.service.AuthService;
 import pro.sky.graduate_work_group5_team1.service.UserPhotoService;
 import pro.sky.graduate_work_group5_team1.util.UtilClassGraduate;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -60,6 +61,7 @@ public class AuthServiceImpl implements AuthService, UtilClassGraduate {
         userTmp.setFirstName(registerReq.getFirstName());
         userTmp.setLastName(registerReq.getLastName());
         userTmp.setPhone(registerReq.getPhone());
+        userTmp.setRegDate(LocalDateTime.now());
         userTmp.setImage(userPhotoService.createEmptyPhoto());
         userRepository.save(userTmp);
         return true;
