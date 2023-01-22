@@ -7,5 +7,4 @@ import pro.sky.graduate_work_group5_team1.model.AdsPhoto;
 @Repository
 public interface AdsPhotoRepository extends JpaRepository<AdsPhoto, Long> {
 
-    AdsPhoto findAdsPhotoByAds_Pk(Integer ads_pk);
 }

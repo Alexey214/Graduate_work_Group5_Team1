@@ -5,11 +5,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-//import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.graduate_work_group5_team1.model.dto.NewPassword;
 import pro.sky.graduate_work_group5_team1.model.dto.ResponseWrapperUser;
@@ -20,6 +19,7 @@ import javax.validation.constraints.Min;
 
 @Validated
 public interface UserApi {
+
     /**
      * Получение пользователя по Id
      *
@@ -96,6 +96,8 @@ public interface UserApi {
                     @ApiResponse(responseCode = "403", description = "Forbidden")})
     ResponseEntity<UserDto> updateUser(@Parameter(description = "user", required = true, schema = @Schema())
                                        @Valid UserDto user);
+
+    ResponseEntity<UserDto> deleteUser();
 
     /**
      * Получение изображения пользователя

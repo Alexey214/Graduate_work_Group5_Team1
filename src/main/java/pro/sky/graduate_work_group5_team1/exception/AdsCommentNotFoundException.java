@@ -7,7 +7,4 @@ public class AdsCommentNotFoundException extends RuntimeException {
         System.out.printf("%s. Комментарий не найден%n", getClass().getSimpleName());
     }
 
-    public AdsCommentNotFoundException(String message) {
-        super(message);
-    }
 }

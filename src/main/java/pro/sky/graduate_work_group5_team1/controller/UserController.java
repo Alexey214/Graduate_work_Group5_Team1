@@ -27,7 +27,6 @@ public class UserController implements UserApi, UtilSecurity {
     private final UserService userService;
     private final UserPhotoService userPhotoService;
 
-
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
     @PostMapping("/setPassword")
@@ -35,13 +34,11 @@ public class UserController implements UserApi, UtilSecurity {
         return ResponseEntity.ok(userService.setPassword(newPassword, login()));
     }
 
-
     @Override
     @GetMapping("/me")
     public ResponseEntity<ResponseWrapperUser> getUsers() {
         return ResponseEntity.ok(userService.getUsers());
     }
-
 
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
@@ -50,6 +47,12 @@ public class UserController implements UserApi, UtilSecurity {
         return ResponseEntity.ok(userService.updateUser(userDto));
     }
 
+    @Override
+    @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
+    @DeleteMapping("/me")
+    public ResponseEntity<UserDto> deleteUser() {
+        return ResponseEntity.ok(userService.deleteUser());
+    }
 
     @Override
     @PreAuthorize("hasRole('ADMIN') || hasRole('USER')")
@@ -73,5 +76,4 @@ public class UserController implements UserApi, UtilSecurity {
             return ResponseEntity.ok(null);
         } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
-
 }

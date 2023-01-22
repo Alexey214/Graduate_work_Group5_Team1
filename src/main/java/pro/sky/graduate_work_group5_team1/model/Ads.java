@@ -29,11 +29,17 @@ public class Ads {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @ToString.Exclude
     private User author;
 
     @OneToMany(mappedBy = "pk", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<AdsComment> adsComment;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "photo_id")
+    @ToString.Exclude
+    private AdsPhoto adsPhoto;
 
     @Override
     public boolean equals(Object o) {

@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import pro.sky.graduate_work_group5_team1.model.dto.RegReq;
 
 import javax.persistence.*;
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -26,22 +26,24 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
-    @SequenceGenerator(name = "user_id_seq", allocationSize = 1, initialValue = 1)
+    @SequenceGenerator(name = "user_id_seq", allocationSize = 1)
     private Integer id;
     private String email;
     private String firstName;
     private String lastName;
     private String password;
     private String phone;
+    private LocalDateTime regDate;
     private String image;
+
     @Enumerated(EnumType.ORDINAL)
     private RegReq.RoleEnum roleEnum;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<Ads> ads;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<AdsComment> adsComment;
 
@@ -60,7 +62,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority(RegReq.RoleEnum.USER.name()));
+        return List.of(new SimpleGrantedAuthority(RegReq.RoleEnum.USER.name()));
     }
 
     @Override
